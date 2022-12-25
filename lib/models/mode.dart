@@ -1,0 +1,2 @@
+
+enum Mode { dark, light }

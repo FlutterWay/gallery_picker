@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import '../controller/gallery_controller.dart';
 import '../models/config.dart';
 import '../models/mode.dart';
 import '/models/media_file.dart';
@@ -11,7 +9,7 @@ class ThumbnailMedia extends StatelessWidget {
   final MediaFile file;
   final Color failIconColor;
   final Config config;
-  ThumbnailMedia({super.key, required this.file, required this.failIconColor,required this.config});
+  const ThumbnailMedia({super.key, required this.file, required this.failIconColor,required this.config});
 
   Color adjustFailedBgColor() {
     if (config.mode == Mode.dark) {

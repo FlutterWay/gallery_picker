@@ -1,11 +1,7 @@
 import 'package:bottom_sheet_bar/bottom_sheet_bar.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:gallery_picker/controller/gallery_controller.dart';
 import '/gallery_picker.dart';
-import '/views/gallery_picker_view/gallery_picker_view.dart';
 import 'package:get/get.dart';
 import '../controller/bottom_sheet_controller.dart';
 

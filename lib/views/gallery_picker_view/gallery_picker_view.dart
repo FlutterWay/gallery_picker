@@ -1,7 +1,6 @@
 import 'package:bottom_sheet_bar/bottom_sheet_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import '../../controller/bottom_sheet_controller.dart';
 import '../../controller/gallery_controller.dart';
 import '../../models/config.dart';

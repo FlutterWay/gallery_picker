@@ -1,7 +1,5 @@
 import 'dart:async';
-
 import 'package:get/get.dart';
-
 import '../models/media_file.dart';
 
 class PickerListener extends GetxController {

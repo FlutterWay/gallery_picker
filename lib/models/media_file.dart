@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:photo_gallery/photo_gallery.dart';
-import 'package:video_thumbnail/video_thumbnail.dart';
 import '../controller/gallery_controller.dart';
 
 class MediaFile {

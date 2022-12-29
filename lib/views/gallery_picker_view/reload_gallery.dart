@@ -1,10 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import '/gallery_picker.dart';
-import 'package:get/get.dart';
-
-import '../../controller/gallery_controller.dart';
 
 class ReloadGallery extends StatelessWidget {
   late Config config;

@@ -1,7 +1,7 @@
-import 'package:flutter/foundation.dart';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import '/models/gallery_album.dart';
-import '../models/config.dart';
 import '../models/mode.dart';
 
 class ThumbnailAlbum extends StatelessWidget {

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import '../../../controller/gallery_controller.dart';
 import '../gridview_static.dart';
 import '/models/gallery_album.dart';

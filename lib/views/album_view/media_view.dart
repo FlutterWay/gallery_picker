@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:transparent_image/transparent_image.dart';
+import 'package:gallery_picker/views/thumbnailMedia.dart';
 import '../../controller/bottom_sheet_controller.dart';
-import '../thumbnailMedia.dart';
 import 'package:get/get.dart';
-import 'package:photo_gallery/photo_gallery.dart';
 import '../../../controller/gallery_controller.dart';
 import '../../../models/media_file.dart';
 

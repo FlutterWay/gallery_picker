@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:get/get.dart';
-
 import '../../controller/bottom_sheet_controller.dart';
 import '../../controller/gallery_controller.dart';
 import 'tappable_appbar.dart';

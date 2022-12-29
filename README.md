@@ -34,7 +34,7 @@ Gallery Picker is a flutter package that will allow you to pick media file(s), m
 
 [✔] Null-safety
 
-You could find the code samples of the given gifs below in `/example/examples` folder. 
+You could find the code samples of the given gifs below in `/example/lib/examples` folder. 
 
 <div style="text-align: center">
     <table>

@@ -66,7 +66,7 @@ Add uses-permission `android/app/src/main/AndroidManifest.xml` file
      <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
  ```
 #### Ios
-Add these configurations to your `ios/Runner/info.plist` file ??????????
+Add these configurations to your `ios/Runner/info.plist` file 
  ```xml
      <key>NSPhotoLibraryUsageDescription</key>
      <string>Privacy - Photo Library Usage Description</string>

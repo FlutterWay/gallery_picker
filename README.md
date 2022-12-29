@@ -1,39 +1,422 @@
-<!--
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
+## modern_gallery_picker
 
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/guides/libraries/writing-package-pages).
+Gallery Picker is a flutter package that will allow you to pick media file(s), manage and navigate inside your gallery with modern tools and views.
 
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-library-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/developing-packages).
--->
-
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
+<img src="https://raw.githubusercontent.com/FlutterWay/files/main/galleryPickerSlide.png" width="1200"/>
 
 ## Features
 
-TODO: List what your package can do. Maybe include images, gifs, or videos.
+[✔] Modern design
+
+[✔] Detailed documentation
+
+[✔] Pick a media file
+
+[✔] Pick multiple media files
+
+[✔] BottomSheet layout
+
+[✔] Fetch all media files from your phone
+
+[✔] Comprehensively customizable design (desitination page, hero destination page...)
+
+[✔] Gallery picker listener
+
+[✔] Thumbnail widgets for media files
+
+[✔] MediaProvider widgets to view video / image files
+
+[✔] Gallery picker StreamBuilder to update your design if selects any file in gallery picker (GalleryPickerBuilder)
+
+[✔] Ready-to-use widgets
+
+[✔] Examples provided (example/lib/examples) 
+
+[✔] Null-safety
+
+<div style="text-align: center">
+    <table>
+        <tr>
+            <td style="text-align: center">
+                <img src="https://raw.githubusercontent.com/FlutterWay/files/main/gallery_picker_light.gif" width="200"/>
+            </td>            
+            <td style="text-align: center">
+                <img src="https://raw.githubusercontent.com/FlutterWay/files/main/gallery_picker_dark.gif" width="200"/>
+            </td>
+            <td style="text-align: center">
+                <img src="https://raw.githubusercontent.com/FlutterWay/files/main/gallery_picker_destination.gif" width="200" />
+            </td>
+            <td style="text-align: center">
+                <img src="https://raw.githubusercontent.com/FlutterWay/files/main/camera_page.gif" width="200" />
+            </td>
+        </tr> 
+    </table>
+</div>
 
 ## Getting started
 
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
+1) Update kotlin version to `1.6.0` and `classpath 'com.android.tools.build:gradle:7.0.4'` in your `build.gradle`
+2) In `android` set the `minSdkVersion` to `25` in your `build.gradle`
+
+#### Android
+Add uses-permission `android/app/src/main/AndroidManifest.xml` file
+ ```xml
+     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+ ```
+#### Ios
+Add these configurations to your `ios/Runner/info.plist` file ??????????
+ ```xml
+     <key>NSPhotoLibraryUsageDescription</key>
+     <string>Privacy - Photo Library Usage Description</string>
+     <key>NSMotionUsageDescription</key>
+     <string>Motion usage description</string>
+     <key>NSPhotoLibraryAddUsageDescription</key>
+     <string>NSPhotoLibraryAddUsageDescription</string>
+ ```
 
 ## Usage
 
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder.
+Quick and simple usage example:
+
+### Pick Single File
 
 ```dart
-const like = 'sample';
+MediaFile? media = await GalleryPicker.pickMedias(context: context,singleMedia: true);
+```
+### Pick Multiple Files
+
+```dart
+List<MediaFile>? medias = await GalleryPicker.pickMedias(context: context);
 ```
 
-## Additional information
+### Get All Media Files in Gallery
 
-TODO: Tell users more about the package: where to find more information, how to
-contribute to the package, how to file issues, what response they can expect
-from the package authors, and more.
+```dart
+GalleryMedia? allmedia = await GalleryPicker.collectGallery;
+```
+
+### Listen selected files inside gallery picker
+
+```dart
+Stream stream = GalleryPicker.listenSelectedFiles;
+```
+Dispose listener 
+```dart
+GalleryPicker.disposeSelectedFilesListener();
+```
+
+### BottomSheetLayout
+
+Gallery Picker could also work as a bottom sheet. Wrap your scaffold's body with BottomSheetLayout 
+
+There is an example at `example/lib/examples/bottom_sheet_example.dart` to see how it could be done.
+
+```dart
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.title),
+      ),
+      body: BottomSheetLayout(
+          onSelect: (medias) {},
+          child: Column(
+            children: [
+```
+
+### Customizable destination page
+
+Within the Gallery Picker you can design a page that will be redirected after selecting any image(s).
+
+Note: There are two builder called multipleMediasBuilder and heroBuilder. If you designed both of them, multipleMediasBuilder will be shown after picking multiple media files, heroBuilder will be shown after picking a single media. Use given hero tag to view your Hero image. You can see a simple example below.
+
+There is an example at `example/lib/examples/pick_medias_with_builder.dart` to see how it could be done.
+
+```dart
+   GalleryPicker.pickMediasWithBuilder(
+        multipleMediasBuilder: ((medias, context) {
+          return Scaffold(
+            appBar: AppBar(
+              title: const Text('Flippers Page'),
+            ),
+            body: GridView.count(
+              crossAxisCount: 3,
+              mainAxisSpacing: 5,
+              crossAxisSpacing: 5,
+              children: [
+                for (var media in medias)
+                  ThumbnailMedia(
+                    media: media,
+                  )
+              ],
+            ),
+            floatingActionButton: FloatingActionButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => MyHomePage(
+                            title: "Selected Medias",
+                            medias: medias,
+                          )),
+                );
+                GalleryPicker.dispose();
+              },
+              child: const Icon(
+                Icons.send,
+                color: Colors.white,
+              ),
+            ),
+          );
+        }),
+        heroBuilder: (tag, media, context) {
+          return Scaffold(
+            appBar: AppBar(
+              title: const Text('Flippers Page'),
+            ),
+            body: Container(
+              color: Colors.lightBlueAccent,
+              padding: const EdgeInsets.all(16.0),
+              alignment: Alignment.topLeft,
+              child: Hero(
+                tag: tag,
+                child: Image.memory(media.thumbnail!),
+              ),
+            ),
+            floatingActionButton: FloatingActionButton(
+              backgroundColor: Colors.orange,
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => MyHomePage(
+                            title: "Selected Medias",
+                            medias: [media],
+                          )),
+                );
+                GalleryPicker.dispose();
+              },
+              child: const Icon(
+                Icons.send,
+                color: Colors.white,
+              ),
+            ),
+          );
+        },
+        context: context);
+```
+
+### Dispose Gallery picker
+
+```dart
+GalleryPicker.dispose();
+```
+
+## Customize your gallery picker
+
+A Config class is provided to user to customize your gallery picker. You can customize any feature you want and select appearance mode.
+
+#### Customizable appereance features
+```dart
+List<MediaFile>? medias = await GalleryPicker.pickMedias(
+  context: context,
+  config: Config(
+    backgroundColor: Colors.white,
+    appbarColor: Colors.white,
+    bottomSheetColor: const Color.fromARGB(255, 247, 248, 250),
+    appbarIconColor: const Color.fromARGB(255, 130, 141, 148),
+    underlineColor: const Color.fromARGB(255, 20, 161, 131),
+    selectedMenuStyle: const TextStyle(color: Colors.black),
+    unselectedMenuStyle:
+        const TextStyle(color: Color.fromARGB(255, 102, 112, 117)),
+    textStyle: const TextStyle(
+        color: Color.fromARGB(255, 108, 115, 121),
+        fontWeight: FontWeight.bold),
+    appbarTextStyle: const TextStyle(color: Colors.black),
+    recents: "RECENTS",
+    gallery: "GALLERY",
+    lastMonth: "Last Month",
+    lastWeek: "Last Week",
+    tapPhotoSelect: "Tap photo to select",
+    selected: "Selected",
+    months: [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December"
+    ],
+    selectIcon: Container(
+      width: 50,
+      height: 50,
+      decoration: const BoxDecoration(
+        shape: BoxShape.circle,
+        color: Color.fromARGB(255, 0, 168, 132),
+      ),
+      child: const Icon(
+        Icons.check,
+        color: Colors.white,
+      ),
+    ),
+  ),
+  )
+```
+
+#### Appearance Mode
+```dart
+List<MediaFile>? medias = await GalleryPicker.pickMedias(
+        context: context,
+        config: Config(
+          mode: Mode.dark
+        ),
+        )
+```
+
+#### Give an initial selected media files
+
+```dart
+List<MediaFile>? medias = await GalleryPicker.pickMedias(
+        context: context,
+        initSelectedMedias: this.selectedMedias,
+        )
+```
+#### Select your priority page
+
+There are two pages called "Recent" and "Gallery". You could change the initial page.
+
+```dart
+List<MediaFile>? medias = await GalleryPicker.pickMedias(
+        context: context,
+        startWithRecent: true,
+        )
+```
+
+## MediaFile
+GalleryPicker returns MediaFile list. You can reach out features below.
+
+[✔] Medium
+[✔] Id
+[✔] MediumType
+[✔] Thumbnail
+[✔] Check with thumbnailFailed if fetching thumbnail fails
+[✔] Check with fileFailed if getting file fails
+[✔] File
+[✔] getThumbnail function
+[✔] getFile function
+[✔] getData function
+[✔] Check if the file selected in gallery picker
+
+## Ready-to-use widgets
+
+### ThumbnailMedia
+
+```dart
+ThumbnailMedia(
+  media: media,
+)
+```
+### ThumbnailAlbum
+
+```dart
+ThumbnailAlbum(
+  album: album,
+  failIconColor: failIconColor,
+  mode: mode,
+  backgroundColor: backgroundColor,
+)
+```
+### PhotoProvider
+
+```dart
+PhotoProvider(
+  media: media,
+)
+```
+### VideoProvider
+
+```dart
+VideoProvider(
+  media: media,
+)
+```
+### MediaProvider
+MediaProvider works with every media type
+
+```dart
+MediaProvider(
+  media: media,
+)
+```
+
+### GalleryPickerBuilder
+
+You can listen and update your design through this builder
+
+```dart
+GalleryPickerBuilder(
+  builder: (selectedFiles, context) {
+    return child
+  },
+)
+```
+### AlbumMediasView
+
+View all media files in the album sorted by its creation date
+
+```dart
+GalleryMedia? allmedia = await GalleryPicker.collectGallery;
+```
+
+```dart
+AlbumMediasView(
+  galleryAlbum: allmedia!.albums[0],
+  textStyle: textStyle,
+)
+```
+### AlbumCategoriesView
+
+View all album categories
+
+```dart
+GalleryMedia? allmedia = await GalleryPicker.collectGallery;
+```
+```dart
+AlbumCategoriesView(
+  albums: allmedia!.albums,
+  categoryBackgroundColor: categoryBackgroundColor,
+  categoryFailIconColor: categoryFailIconColor,
+  mode: mode,
+  onFocusChange: onFocusChange,
+  onHover: onHover,
+  onLongPress: onLongPress,
+  onPressed: onPressed,
+)
+```
+
+## Examples
+Check out our examples!
+### Standart Gallery Picker
+`example/lib/examples/gallery_picker_example.dart`
+### Pick Media Files With Destination Page
+`example/lib/examples/pick_medias_with_builder.dart`
+### BottomSheet Example
+`example/lib/examples/bottom_sheet_example.dart`
+### WhatsApp Pick Photo Page
+`example/lib/examples/whatsapp_pick_photo.dart`
+
+## This package was possible to create with:
+- The [photo_gallery](https://pub.dev/packages/photo_gallery) package
+- The [transparent_image](https://pub.dev/packages/transparent_image) package
+- The [get](https://pub.dev/packages/get) package
+- The [video_player](https://pub.dev/packages/video_player) package
+- The [intl](https://pub.dev/packages/intl) package
+- The [bottom_sheet_bar](https://pub.dev/packages/bottom_sheet_bar) package
+- The [platform_info](https://pub.dev/packages/platform_info) package
+- The [permission_handler](https://pub.dev/packages/permission_handler) package

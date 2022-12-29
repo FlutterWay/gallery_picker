@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:photo_gallery/photo_gallery.dart';
+import '../../controller/bottom_sheet_controller.dart';
 import '../../controller/gallery_controller.dart';
 import '../../models/config.dart';
 
-class SelectedMediaWidget extends StatelessWidget {
-  var galleryController = Get.find<PhoneGalleryController>();
+class SelectedMediasView extends StatelessWidget {
+  PhoneGalleryController controller;
   late Config config;
-  SelectedMediaWidget({super.key}) {
-    config = galleryController.config;
+  SelectedMediasView({super.key, required this.controller}) {
+    config = controller.config;
   }
 
   @override
@@ -29,7 +30,7 @@ class SelectedMediaWidget extends StatelessWidget {
               child: ListView(
                 scrollDirection: Axis.horizontal,
                 children: [
-                  for (var selectedMedia in galleryController.selectedFiles)
+                  for (var selectedMedia in controller.selectedFiles)
                     Padding(
                       padding: const EdgeInsets.only(
                           top: 3.0, bottom: 3.0, right: 2),
@@ -39,9 +40,9 @@ class SelectedMediaWidget extends StatelessWidget {
                             image: DecorationImage(
                                 fit: BoxFit.fill,
                                 image: ThumbnailProvider(
-                                  mediumId: selectedMedia.mediaFile.id,
+                                  mediumId: selectedMedia.medium.id,
                                   mediumType:
-                                      selectedMedia.mediaFile.mediumType,
+                                      selectedMedia.medium.mediumType,
                                   highQuality: true,
                                 ))),
                         child: SizedBox(
@@ -55,25 +56,28 @@ class SelectedMediaWidget extends StatelessWidget {
             ),
             TextButton(
               onPressed: () {
-                if (galleryController.selectedFiles.length == 1 &&
-                    galleryController.heroBuilder != null) {
+                if (controller.selectedFiles.length == 1 &&
+                    controller.heroBuilder != null) {
                   Navigator.of(context).push(
                       MaterialPageRoute<void>(builder: (BuildContext context) {
-                    return galleryController.heroBuilder!(
-                        galleryController.selectedFiles[0].mediaFile.id,
-                        galleryController.selectedFiles[0],context);
+                    return controller.heroBuilder!(
+                        controller.selectedFiles[0].medium.id,
+                        controller.selectedFiles[0],
+                        context);
                   }));
-                } else if (galleryController.multipleMediaBuilder != null) {
+                } else if (controller.multipleMediasBuilder != null) {
                   Navigator.of(context).push(
                       MaterialPageRoute<void>(builder: (BuildContext context) {
-                    return galleryController
-                        .multipleMediaBuilder!(galleryController.selectedFiles,context);
+                    return controller.multipleMediasBuilder!(
+                        controller.selectedFiles, context);
                   }));
                 } else {
-                  galleryController.onSelect(galleryController.selectedFiles);
-                  Navigator.pop(context);
-                  if (!galleryController.isRecent) {
+                  controller.onSelect(controller.selectedFiles);
+                  if (GetInstance().isRegistered<BottomSheetController>()) {
+                    Get.find<BottomSheetController>().close();
+                  } else {
                     Navigator.pop(context);
+                    controller.disposeController();
                   }
                 }
               },

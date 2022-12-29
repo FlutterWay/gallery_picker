@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
@@ -6,32 +7,68 @@ import 'package:video_thumbnail/video_thumbnail.dart';
 import '../controller/gallery_controller.dart';
 
 class MediaFile {
-  Medium mediaFile;
+  Medium medium;
   MediumType? type;
   Uint8List? thumbnail;
-  bool thumbnailFailed=false;
-
-  MediaFile({required this.mediaFile}) {
-    type = mediaFile.mediumType;
+  Uint8List? data;
+  late String id;
+  bool thumbnailFailed = false;
+  File? file;
+  MediaFile({required this.medium}) {
+    type = medium.mediumType;
+    id = medium.id;
   }
   Future<void> getThumbnail() async {
-    print("zooooortlamaca");
     try {
       thumbnail =
-          Uint8List.fromList(await mediaFile.getThumbnail(highQuality: true));
+          Uint8List.fromList(await medium.getThumbnail(highQuality: true));
     } catch (e) {
       thumbnailFailed = true;
     }
   }
 
-  void unselect() {
-    Get.find<PhoneGalleryController>().unselectMedia(this);
+  Future<File> getFile() async {
+    file = await medium.getFile();
+    return file!;
   }
 
-  void select() {
-    Get.find<PhoneGalleryController>().selectMedia(this);
+  Future<Uint8List> getData() async {
+    if (file == null) {
+      await getFile();
+    }
+    data = await file!.readAsBytes();
+    return data!;
   }
 
-  bool get isSelected =>
-      Get.find<PhoneGalleryController>().isSelectedMedia(this);
+  void unselect({PhoneGalleryController? controller}) {
+    if (controller != null) {
+      controller.unselectMedia(this);
+    } else {
+      if (GetInstance().isRegistered<PhoneGalleryController>()) {
+        Get.find<PhoneGalleryController>().unselectMedia(this);
+      }
+    }
+  }
+
+  void select({PhoneGalleryController? controller}) {
+    if (controller != null) {
+      controller.selectMedia(this);
+    } else {
+      if (GetInstance().isRegistered<PhoneGalleryController>()) {
+        Get.find<PhoneGalleryController>().selectMedia(this);
+      }
+    }
+  }
+
+  bool? isSelected({PhoneGalleryController? controller}) {
+    if (controller != null) {
+      return controller.isSelectedMedia(this);
+    } else {
+      if (GetInstance().isRegistered<PhoneGalleryController>()) {
+        return Get.find<PhoneGalleryController>().isSelectedMedia(this);
+      } else {
+        return null;
+      }
+    }
+  }
 }

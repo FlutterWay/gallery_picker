@@ -1,63 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:gallery_picker/gallery_picker.dart';
-import 'package:gallery_picker_example/examples/pick_medias_with_builder.dart';
-import 'examples/gallery_picker_example.dart';
-import 'examples/multiple_medias.dart';
-import 'examples/whatsapp_pick_photo.dart';
 
-void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class GalleryPickerExample extends StatefulWidget {
+  const GalleryPickerExample({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        brightness: Brightness.light,
-        /* light theme settings */
-      ),
-      darkTheme: ThemeData(
-        brightness: Brightness.dark,
-        /* dark theme settings */
-      ),
-      themeMode: ThemeMode.dark,
-      home: const GalleryPickerExample(),
-    );
-  }
+  State<GalleryPickerExample> createState() => _GalleryPickerExampleState();
 }
 
-class MyHomePage extends StatefulWidget {
-  final List<MediaFile>? medias;
-  const MyHomePage({super.key, required this.title, this.medias});
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
+class _GalleryPickerExampleState extends State<GalleryPickerExample> {
   List<MediaFile> selectedMedias = [];
-
-  @override
-  void initState() {
-    if (widget.medias != null) {
-      selectedMedias = widget.medias!;
-    }
-    super.initState();
-  }
-
   int pageIndex = 0;
   var controller = PageController(initialPage: 0);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
       appBar: AppBar(
         title: Text("Pick medias"),
       ),
@@ -174,59 +131,13 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<void> pickMedias() async {
     List<MediaFile>? medias = await GalleryPicker.pickMedias(
-        context: context,
-        initSelectedMedias: selectedMedias,
-        startWithRecent: true);
+      context: context,
+      config: Config(mode: Mode.dark),
+    );
     if (medias != null) {
       setState(() {
-        this.selectedMedias += medias;
+        selectedMedias += medias;
       });
     }
-  }
-
-  pickMediasWithBuilder() {
-    GalleryPicker.pickMediasWithBuilder(
-        multipleMediasBuilder: ((medias, context) {
-          return MultipleMediasView(medias);
-        }),
-        heroBuilder: (tag, media, context) {
-          return Scaffold(
-            appBar: AppBar(
-              title: const Text('Hero Page'),
-            ),
-            body: Center(
-                child: Hero(
-              tag: tag,
-              child: MediaProvider(
-                media: media,
-                width: MediaQuery.of(context).size.width - 50,
-                height: 300,
-              ),
-            )),
-            floatingActionButton: FloatingActionButton(
-              backgroundColor: Colors.blue,
-              onPressed: () {
-                GalleryPicker.dispose();
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => MyHomePage(
-                            title: "Selected Medias",
-                            medias: [media],
-                          )),
-                );
-              },
-              child: const Icon(
-                Icons.send,
-                color: Colors.white,
-              ),
-            ),
-          );
-        },
-        context: context);
-  }
-
-  Future<void> getGalleryMedia() async {
-    GalleryMedia? allmedia = await GalleryPicker.collectGallery;
   }
 }

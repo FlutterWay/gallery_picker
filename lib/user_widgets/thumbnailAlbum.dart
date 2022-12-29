@@ -1,27 +1,22 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:gallery_picker/models/gallery_album.dart';
-import 'package:get/get.dart';
-import '../controller/gallery_controller.dart';
+import '/models/gallery_album.dart';
 import '../models/config.dart';
 import '../models/mode.dart';
-import '/models/media_file.dart';
-import 'package:photo_gallery/photo_gallery.dart';
-import 'package:transparent_image/transparent_image.dart';
 
 class ThumbnailAlbum extends StatelessWidget {
   final GalleryAlbum album;
-  final Color failIconColor;
-  final Config config = Get.find<PhoneGalleryController>().config;
-  ThumbnailAlbum({super.key, required this.album, required this.failIconColor});
+  final Color failIconColor, backgroundColor;
+  final Mode mode;
+  ThumbnailAlbum({super.key, required this.album, required this.failIconColor,required this.mode,required this.backgroundColor});
 
   Color adjustFailedBgColor() {
-    if (config.mode == Mode.dark) {
+    if (mode == Mode.dark) {
       return lighten(
-        config.backgroundColor,
+        backgroundColor,
       );
     } else {
-      return darken(config.backgroundColor);
+      return darken(backgroundColor);
     }
   }
 
@@ -58,26 +53,12 @@ class ThumbnailAlbum extends StatelessWidget {
                 color: failIconColor,
               ))
         else if (album.thumbnail != null)
-          FadeInImage(
-            fadeInDuration: const Duration(milliseconds: 200),
+          Image.memory(
+            Uint8List.fromList(album.thumbnail!),
             fit: BoxFit.cover,
-            placeholder: MemoryImage(kTransparentImage),
-            image: MemoryImage(Uint8List.fromList(album.thumbnail!)),
           )
         else
           const SizedBox(),
-        Positioned(
-            bottom: 10,
-            left: 10,
-            child: Icon(
-              album.type == AlbumType.video
-                  ? Icons.video_camera_back
-                  : album.type == AlbumType.image
-                      ? Icons.image
-                      : Icons.folder,
-              color: Colors.white,
-              size: 20,
-            )),
         Opacity(
           opacity: 0.5,
           child: Container(

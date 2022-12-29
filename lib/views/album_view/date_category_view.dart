@@ -5,10 +5,14 @@ import '../gridview_static.dart';
 import '/models/gallery_album.dart';
 import 'media_view.dart';
 
-class DateCategoryWidget extends StatelessWidget {
-  DateCategoryWidget({super.key, required this.category}){
-    print(category.name);
-  }
+class DateCategoryWiew extends StatelessWidget {
+  PhoneGalleryController controller;
+  bool singleMedia;
+  DateCategoryWiew(
+      {super.key,
+      required this.category,
+      required this.controller,
+      required this.singleMedia});
   DateCategory category;
 
   int getRowCount() {
@@ -31,7 +35,7 @@ class DateCategoryWidget extends StatelessWidget {
                 alignment: Alignment.centerLeft,
                 child: Text(
                   category.name,
-                  style: Get.find<PhoneGalleryController>().config.textStyle,
+                  style: controller.config.textStyle,
                 ),
               ),
             ),
@@ -43,7 +47,11 @@ class DateCategoryWidget extends StatelessWidget {
               crossAxisSpacing: 1.0,
               children: <Widget>[
                 ...category.files.map(
-                  (medium) => MediaView(medium),
+                  (medium) => MediaView(
+                    medium,
+                    controller: controller,
+                    singleMedia: singleMedia,
+                  ),
                 ),
               ],
             ),

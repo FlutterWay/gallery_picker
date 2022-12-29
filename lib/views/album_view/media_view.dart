@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:transparent_image/transparent_image.dart';
-import '/views/ThumbnailMedia.dart';
+import '../../controller/bottom_sheet_controller.dart';
+import '../thumbnailMedia.dart';
 import 'package:get/get.dart';
 import 'package:photo_gallery/photo_gallery.dart';
 import '../../../controller/gallery_controller.dart';
@@ -8,8 +9,10 @@ import '../../../models/media_file.dart';
 
 class MediaView extends StatelessWidget {
   final MediaFile file;
-  var controller = Get.find<PhoneGalleryController>();
-  MediaView(this.file, {super.key});
+  PhoneGalleryController controller;
+  bool singleMedia;
+  MediaView(this.file,
+      {super.key, required this.controller, required this.singleMedia});
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -17,31 +20,63 @@ class MediaView extends StatelessWidget {
       children: [
         GestureDetector(
           onLongPress: () {
-            file.select();
+            if (singleMedia) {
+              if (controller.heroBuilder != null) {
+                Navigator.of(context).push(
+                    MaterialPageRoute<void>(builder: (BuildContext context) {
+                  return controller.heroBuilder!(file.medium.id, file, context);
+                }));
+              } else {
+                controller.selectedFiles.add(file);
+                controller.onSelect(controller.selectedFiles);
+                controller.updatePickerListener();
+                if (GetInstance().isRegistered<BottomSheetController>()) {
+                  Get.find<BottomSheetController>().close();
+                } else {
+                  Navigator.pop(context);
+                  controller.disposeController();
+                }
+              }
+            } else {
+              file.select(controller: controller);
+            }
           },
           onTap: () {
             if (controller.pickerMode) {
-              file.isSelected ? file.unselect() : file.select();
+              file.isSelected(controller: controller)!
+                  ? file.unselect(controller: controller)
+                  : file.select(controller: controller);
             } else {
               if (controller.heroBuilder != null) {
                 Navigator.of(context).push(
                     MaterialPageRoute<void>(builder: (BuildContext context) {
-                  return controller.heroBuilder!(file.mediaFile.id, file,context);
+                  return controller.heroBuilder!(file.medium.id, file, context);
                 }));
               } else {
-                controller.onSelect([file]);
-                Navigator.pop(context);
-                GetInstance().delete<PhoneGalleryController>();
+                controller.selectedFiles.add(file);
+                controller.onSelect(controller.selectedFiles);
+                controller.updatePickerListener();
+                if (GetInstance().isRegistered<BottomSheetController>()) {
+                  Get.find<BottomSheetController>().close();
+                } else {
+                  Navigator.pop(context);
+                  controller.disposeController();
+                }
               }
             }
           },
           child: ThumbnailMedia(
-              file: file, failIconColor: controller.config.appbarIconColor),
+            file: file,
+            failIconColor: controller.config.appbarIconColor,
+            config: controller.config,
+          ),
         ),
-        if (file.isSelected)
+        if (file.isSelected(controller: controller)!)
           GestureDetector(
             onTap: () {
-              file.isSelected ? file.unselect() : file.select();
+              file.isSelected(controller: controller)!
+                  ? file.unselect(controller: controller)
+                  : file.select(controller: controller);
             },
             child: Opacity(
               opacity: 0.5,

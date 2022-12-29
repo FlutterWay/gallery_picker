@@ -15,7 +15,7 @@ class Config {
       unselectedMenuStyle;
   String recents, gallery, lastMonth, lastWeek, tapPhotoSelect, selected;
   List<String> months;
-  Mode? mode;
+  Mode mode;
 
   Config(
       {Color? backgroundColor,
@@ -47,7 +47,7 @@ class Config {
         "November",
         "December"
       ],
-      this.mode = Mode.dark,
+      this.mode = Mode.light,
       Widget? selectIcon}) {
     if (backgroundColor == null) {
       this.backgroundColor = mode == Mode.dark

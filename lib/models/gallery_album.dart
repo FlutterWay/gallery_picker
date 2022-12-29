@@ -13,6 +13,12 @@ class GalleryAlbum {
   int get count =>
       dateCategories.expand((element) => element.files).toList().length;
   String? get name => album.name;
+  
+  List<MediaFile> get medias {
+    return dateCategories
+        .expand<MediaFile>((element) => element.files)
+        .toList();
+  }
 
   late AlbumType type;
 
@@ -37,9 +43,9 @@ class GalleryAlbum {
 
   Future<void> initialize() async {
     List<DateCategory> dateCategory = [];
-    for (var file in sortAlbumMediaDates((await album.listMedia()).items)) {
-      MediaFile mediaFile = MediaFile(mediaFile: file);
-      String name = getDateCategory(file);
+    for (var medium in sortAlbumMediaDates((await album.listMedia()).items)) {
+      MediaFile mediaFile = MediaFile(medium: medium);
+      String name = getDateCategory(medium);
       if (dateCategory.any((element) => element.name == name)) {
         dateCategory
             .singleWhere((element) => element.name == name)
@@ -59,7 +65,7 @@ class GalleryAlbum {
 
   DateTime? get lastDate {
     if (dateCategories.isNotEmpty) {
-      return dateCategories.first.files.first.mediaFile.lastDate;
+      return dateCategories.first.files.first.medium.lastDate;
     } else {
       return null;
     }
@@ -69,9 +75,6 @@ class GalleryAlbum {
       dateCategories.expand((element) => element.files).toList();
 
   String getDateCategory(Medium mediaFile) {
-    //print("Creation Date: " + mediaFile.creationDateae.toString());
-    //print("Modified Date: " + mediaFile.modifiedDate!.toString());
-    //print("-------------------------------------------------------");
     if (daysBetween(mediaFile.lastDate!) <= 3) {
       return "Recent";
     } else if (daysBetween(mediaFile.lastDate!) > 3 &&
@@ -112,19 +115,19 @@ class GalleryAlbum {
 
     for (var category in dateCategories) {
       category.files.sort((a, b) {
-        if (a.mediaFile.lastDate == null) {
+        if (a.medium.lastDate == null) {
           return 1;
-        } else if (b.mediaFile.lastDate == null) {
+        } else if (b.medium.lastDate == null) {
           return -1;
         } else {
-          return b.mediaFile.lastDate!.compareTo(a.mediaFile.lastDate!);
+          return b.medium.lastDate!.compareTo(a.medium.lastDate!);
         }
       });
     }
   }
 
   void addFile(MediaFile file) {
-    String name = getDateCategory(file.mediaFile);
+    String name = getDateCategory(file.medium);
     if (dateCategories.any((element) => element.name == name)) {
       dateCategories
           .singleWhere((element) => element.name == name)

@@ -1,7 +1,7 @@
 name: gallery_picker
 description: A new Flutter package project.
 version: 0.0.1
-homepage:
+homepage: https://github.com/FlutterWay/gallery_picker
 
 environment:
   sdk: '>=2.18.5 <3.0.0'
@@ -14,11 +14,12 @@ dependencies:
   photo_gallery: ^1.1.1
   permission_handler: ^10.2.0
   transparent_image: ^2.0.0
+  camera: ^0.10.1
   video_player: ^2.4.10
   get: ^4.6.5
   video_thumbnail: ^0.5.3
   intl: ^0.18.0
-  modal_bottom_sheet: ^2.1.2
+  bottom_sheet_bar: ^2.3.8
 dev_dependencies:
   flutter_test:
     sdk: flutter

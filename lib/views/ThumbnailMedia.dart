@@ -10,8 +10,8 @@ import 'package:transparent_image/transparent_image.dart';
 class ThumbnailMedia extends StatelessWidget {
   final MediaFile file;
   final Color failIconColor;
-  final Config config = Get.find<PhoneGalleryController>().config;
-  ThumbnailMedia({super.key, required this.file, required this.failIconColor});
+  final Config config;
+  ThumbnailMedia({super.key, required this.file, required this.failIconColor,required this.config});
 
   Color adjustFailedBgColor() {
     if (config.mode == Mode.dark) {
@@ -58,7 +58,7 @@ class ThumbnailMedia extends StatelessWidget {
                     ))
               else if (file.thumbnail != null)
                 Hero(
-                  tag: file.mediaFile.id,
+                  tag: file.medium.id,
                   child: FadeInImage(
                     fadeInDuration: const Duration(milliseconds: 200),
                     fit: BoxFit.cover,
@@ -73,7 +73,7 @@ class ThumbnailMedia extends StatelessWidget {
                     bottom: 10,
                     left: 10,
                     child: Icon(
-                      file.mediaFile.mediumType == MediumType.video
+                      file.medium.mediumType == MediumType.video
                           ? Icons.video_camera_back
                           : null,
                       color: Colors.white,

@@ -1,4 +1,4 @@
-## modern_gallery_picker
+## gallery_picker
 
 Gallery Picker is a flutter package that will allow you to pick media file(s), manage and navigate inside your gallery with modern tools and views.
 

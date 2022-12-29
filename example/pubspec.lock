@@ -23,7 +23,7 @@ packages:
     source: hosted
     version: "2.3.8"
   camera:
-    dependency: transitive
+    dependency: "direct dev"
     description:
       name: camera
       url: "https://pub.dartlang.org"
@@ -141,7 +141,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "0.0.3"
+    version: "0.0.4"
   get:
     dependency: transitive
     description:

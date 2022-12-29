@@ -19,7 +19,6 @@ class AlbumAppBar extends StatelessWidget with PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("zort");
     return TappableAppbar(
       controller: bottomSheetController,
       child: AppBar(

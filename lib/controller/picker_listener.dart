@@ -11,7 +11,6 @@ class PickerListener extends GetxController {
   Stream<List<MediaFile>> get stream => controller.stream;
 
   void updateController(List<MediaFile> medias) {
-    print("len:${medias.length}");
     controller.add(medias);
   }
 

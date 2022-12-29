@@ -44,7 +44,6 @@ class _MultipleMediasViewState extends State<MultipleMediasView> {
               alignment: Alignment.centerRight,
               child: TextButton(
                   onPressed: () {
-                    print(pageIndex);
                     if (pageIndex < widget.medias.length - 1) {
                       pageIndex++;
                       controller.animateToPage(pageIndex,

@@ -17,7 +17,6 @@ class FilesStreamBuilder extends StatelessWidget {
     return StreamBuilder(
         stream: Get.find<PickerListener>().stream,
         builder: ((context, snapshot) {
-          print("snapshot:${snapshot.data}");
           return builder(snapshot.data, context);
         }));
   }

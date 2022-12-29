@@ -35,7 +35,6 @@ class _WhatsappPickPhotoState extends State<WhatsappPickPhoto> {
   }
 
   Future<void> initCamera() async {
-    print(cameraLensDirection);
     cameraController = null;
     setState(() {});
     cameras ??= await availableCameras();

@@ -88,7 +88,6 @@ class PhoneGalleryController extends GetxController {
 
   void updatePickerListener() {
     if (GetInstance().isRegistered<PickerListener>()) {
-      print(_selectedFiles.length);
       Get.find<PickerListener>().updateController(_selectedFiles);
     }
   }

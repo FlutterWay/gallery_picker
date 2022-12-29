@@ -134,7 +134,6 @@ class _BottomSheetExampleState extends State<BottomSheetExample> {
               ),
               TextButton(
                 onPressed: () {
-                  print("lol");
                   GalleryPicker.openSheet();
                 },
                 child: const Icon(

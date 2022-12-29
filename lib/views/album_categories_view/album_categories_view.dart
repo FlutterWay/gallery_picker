@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../user_widgets/thumbnailAlbum.dart';
+import '../../user_widgets/thumbnail_album.dart';
 import '../../models/config.dart';
 import '../../../controller/gallery_controller.dart';
 

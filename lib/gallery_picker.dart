@@ -10,7 +10,7 @@ export 'user_widgets/thumbnail_media.dart';
 export 'user_widgets/album_categories_view.dart';
 export 'user_widgets/album_medias.dart';
 export 'user_widgets/date_category_view.dart';
-export 'user_widgets/thumbnailAlbum.dart';
+export 'user_widgets/thumbnail_album.dart';
 export 'user_widgets/files_stream_builder.dart';
 export 'user_widgets/photo_provider.dart';
 export 'user_widgets/video_provider.dart';

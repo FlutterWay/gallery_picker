@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:gallery_picker/views/thumbnailMedia.dart';
 import '../../controller/bottom_sheet_controller.dart';
 import 'package:get/get.dart';
 import '../../../controller/gallery_controller.dart';
 import '../../../models/media_file.dart';
+import '../thumbnail_media_file.dart';
 
 class MediaView extends StatelessWidget {
   final MediaFile file;
@@ -63,7 +63,7 @@ class MediaView extends StatelessWidget {
               }
             }
           },
-          child: ThumbnailMedia(
+          child: ThumbnailMediaFile(
             file: file,
             failIconColor: controller.config.appbarIconColor,
             config: controller.config,

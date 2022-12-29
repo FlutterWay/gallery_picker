@@ -5,11 +5,11 @@ import '/models/media_file.dart';
 import 'package:photo_gallery/photo_gallery.dart';
 import 'package:transparent_image/transparent_image.dart';
 
-class ThumbnailMedia extends StatelessWidget {
+class ThumbnailMediaFile extends StatelessWidget {
   final MediaFile file;
   final Color failIconColor;
   final Config config;
-  const ThumbnailMedia({super.key, required this.file, required this.failIconColor,required this.config});
+  const ThumbnailMediaFile({super.key, required this.file, required this.failIconColor,required this.config});
 
   Color adjustFailedBgColor() {
     if (config.mode == Mode.dark) {

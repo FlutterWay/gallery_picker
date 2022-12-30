@@ -20,3 +20,7 @@
 
 * changes made
 
+## 0.0.6
+
+* Analyze issues solved
+

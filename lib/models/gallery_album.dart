@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:photo_gallery/photo_gallery.dart';
@@ -11,7 +12,7 @@ class GalleryAlbum {
   int get count =>
       dateCategories.expand((element) => element.files).toList().length;
   String? get name => album.name;
-  
+
   List<MediaFile> get medias {
     return dateCategories
         .expand<MediaFile>((element) => element.files)
@@ -57,7 +58,9 @@ class GalleryAlbum {
     try {
       thumbnail = await album.getThumbnail(highQuality: true);
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
     }
   }
 

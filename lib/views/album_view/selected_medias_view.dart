@@ -6,16 +6,14 @@ import '../../controller/gallery_controller.dart';
 import '../../models/config.dart';
 
 class SelectedMediasView extends StatelessWidget {
-  PhoneGalleryController controller;
-  late Config config;
-  SelectedMediasView({super.key, required this.controller}) {
-    config = controller.config;
-  }
+  final PhoneGalleryController controller;
+  final Config config;
+  SelectedMediasView({super.key, required this.controller})
+      : config = controller.config;
 
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height - 167;
     return Container(
       color: config.bottomSheetColor,
       width: width,
@@ -41,11 +39,10 @@ class SelectedMediasView extends StatelessWidget {
                                 fit: BoxFit.fill,
                                 image: ThumbnailProvider(
                                   mediumId: selectedMedia.medium.id,
-                                  mediumType:
-                                      selectedMedia.medium.mediumType,
+                                  mediumType: selectedMedia.medium.mediumType,
                                   highQuality: true,
                                 ))),
-                        child: SizedBox(
+                        child: const SizedBox(
                           width: 47,
                           height: 47,
                         ),

@@ -4,14 +4,14 @@ import 'thumbnail_album.dart';
 import '../models/mode.dart';
 
 class AlbumCategoriesView extends StatelessWidget {
-  List<GalleryAlbum> albums;
-  Function(GalleryAlbum album)? onPressed;
-  Function(GalleryAlbum album, bool)? onHover;
-  Function(GalleryAlbum album)? onLongPress;
-  Function(GalleryAlbum album, bool)? onFocusChange;
+  final List<GalleryAlbum> albums;
+  final Function(GalleryAlbum album)? onPressed;
+  final Function(GalleryAlbum album, bool)? onHover;
+  final Function(GalleryAlbum album)? onLongPress;
+  final Function(GalleryAlbum album, bool)? onFocusChange;
   final Color categoryFailIconColor, categoryBackgroundColor;
   final Mode mode;
-  AlbumCategoriesView(
+  const AlbumCategoriesView(
       {super.key,
       required this.albums,
       required this.categoryBackgroundColor,

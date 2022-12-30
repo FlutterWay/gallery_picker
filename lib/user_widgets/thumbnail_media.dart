@@ -6,8 +6,12 @@ import 'package:transparent_image/transparent_image.dart';
 class ThumbnailMedia extends StatelessWidget {
   final MediaFile media;
   final bool noIcon;
-  final Widget Function(MediaFile media,BuildContext context)? onErrorBuilder;
-  const ThumbnailMedia({super.key, required this.media, this.onErrorBuilder,this.noIcon=false});
+  final Widget Function(MediaFile media, BuildContext context)? onErrorBuilder;
+  const ThumbnailMedia(
+      {super.key,
+      required this.media,
+      this.onErrorBuilder,
+      this.noIcon = false});
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +29,7 @@ class ThumbnailMedia extends StatelessWidget {
                   color: Colors.grey,
                 )
               else if (media.thumbnailFailed && onErrorBuilder == null)
-                onErrorBuilder!(media,context)
+                onErrorBuilder!(media, context)
               else if (media.thumbnail != null)
                 FadeInImage(
                   fadeInDuration: const Duration(milliseconds: 200),

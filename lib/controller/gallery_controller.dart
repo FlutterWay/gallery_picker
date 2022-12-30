@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -43,8 +44,8 @@ class PhoneGalleryController extends GetxController {
 
   void updateSelectedFiles(List<MediaFile> medias) {
     _selectedFiles = medias;
-    if(selectedFiles.isNotEmpty){
-      _pickerMode=true;
+    if (selectedFiles.isNotEmpty) {
+      _pickerMode = true;
     }
     update();
   }
@@ -104,7 +105,7 @@ class PhoneGalleryController extends GetxController {
   Future<void> initializeAlbums() async {
     GalleryMedia? media = await PhoneGalleryController.collectGallery;
     if (media != null) {
-      this._galleryAlbums = media.albums;
+      _galleryAlbums = media.albums;
     }
     _isInitialized = true;
     update();
@@ -136,7 +137,9 @@ class PhoneGalleryController extends GetxController {
               entireGalleryAlbum.thumbnail =
                   await videoAlbum.getThumbnail(highQuality: true);
             } catch (e) {
-              print(e);
+              if (kDebugMode) {
+                print(e);
+              }
             }
           } else if (lastVideoDate == null) {
           } else {
@@ -146,7 +149,9 @@ class PhoneGalleryController extends GetxController {
                     await videoAlbum.getThumbnail(highQuality: true);
               } catch (e) {
                 entireGalleryAlbum.thumbnail = null;
-                print(e);
+                if (kDebugMode) {
+                  print(e);
+                }
               }
             }
           }

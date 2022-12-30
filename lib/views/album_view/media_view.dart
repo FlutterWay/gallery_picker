@@ -7,9 +7,9 @@ import '../thumbnail_media_file.dart';
 
 class MediaView extends StatelessWidget {
   final MediaFile file;
-  PhoneGalleryController controller;
-  bool singleMedia;
-  MediaView(this.file,
+  final PhoneGalleryController controller;
+  final bool singleMedia;
+  const MediaView(this.file,
       {super.key, required this.controller, required this.singleMedia});
   @override
   Widget build(BuildContext context) {

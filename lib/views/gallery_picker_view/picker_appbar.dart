@@ -5,9 +5,9 @@ import '../../controller/gallery_controller.dart';
 import 'tappable_appbar.dart';
 
 class PickerAppBar extends StatelessWidget with PreferredSizeWidget {
-  PhoneGalleryController controller;
-  BottomSheetController? bottomSheetController;
-  PickerAppBar(
+  final PhoneGalleryController controller;
+  final BottomSheetController? bottomSheetController;
+  const PickerAppBar(
       {super.key,
       required this.bottomSheetController,
       required this.controller});
@@ -25,7 +25,7 @@ class PickerAppBar extends StatelessWidget with PreferredSizeWidget {
                 bottomSheetController!.close();
               } else {
                 Navigator.pop(context);
-                await Future.delayed(Duration(milliseconds: 500));
+                await Future.delayed(const Duration(milliseconds: 500));
                 controller.disposeController();
               }
             },
@@ -67,5 +67,5 @@ class PickerAppBar extends StatelessWidget with PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => Size.fromHeight(48);
+  Size get preferredSize => const Size.fromHeight(48);
 }

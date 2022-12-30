@@ -15,7 +15,7 @@ class BottomSheetLayout extends StatefulWidget {
   final Widget Function(List<MediaFile> medias, BuildContext context)?
       multipleMediasBuilder;
   final bool startWithRecent;
-   BottomSheetLayout(
+  BottomSheetLayout(
       {super.key,
       required this.child,
       required this.onSelect,
@@ -23,11 +23,13 @@ class BottomSheetLayout extends StatefulWidget {
       this.heroBuilder,
       this.initSelectedMedias,
       this.multipleMediasBuilder,
-      this.startWithRecent = true}){
-        if(initSelectedMedias!=null&&GetInstance().isRegistered<PhoneGalleryController>()){
-          Get.find<PhoneGalleryController>().updateSelectedFiles(initSelectedMedias!);
-        }
-      }
+      this.startWithRecent = true}) {
+    if (initSelectedMedias != null &&
+        GetInstance().isRegistered<PhoneGalleryController>()) {
+      Get.find<PhoneGalleryController>()
+          .updateSelectedFiles(initSelectedMedias!);
+    }
+  }
 
   @override
   State<BottomSheetLayout> createState() => _BottomSheetLayoutState();
@@ -54,7 +56,7 @@ class _BottomSheetLayoutState extends State<BottomSheetLayout> {
       if (renderBox.size.height > 200 &&
           !sheetController.isExpanded &&
           !viewCollapsedPicker) {
-        await Future.delayed(Duration(milliseconds: 100));
+        await Future.delayed(const Duration(milliseconds: 100));
         controller.appBarTapping = false;
         setState(() {
           viewCollapsedPicker = true;
@@ -63,7 +65,7 @@ class _BottomSheetLayoutState extends State<BottomSheetLayout> {
         if (viewCollapsedPicker) {
           viewCollapsedPicker = false;
           controller.appBarTapping = false;
-          await Future.delayed(Duration(milliseconds: 10));
+          await Future.delayed(const Duration(milliseconds: 10));
           setState(() {});
         }
       }
@@ -131,7 +133,7 @@ class ViewCollapsed extends StatelessWidget {
   final GalleryPickerView picker;
   final bool viewPicker;
   final Function(BuildContext context) onBuild;
-  ViewCollapsed({
+  const ViewCollapsed({
     super.key,
     required this.picker,
     required this.onBuild,

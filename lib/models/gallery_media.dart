@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+
 import 'gallery_album.dart';
 
 class GalleryMedia {
@@ -10,7 +12,9 @@ class GalleryMedia {
     try {
       return albums.singleWhere((element) => element.album.name == name);
     } catch (e) {
-      print(e);
+      if (kDebugMode) {
+        print(e);
+      }
       return null;
     }
   }

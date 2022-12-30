@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:video_player/video_player.dart';
 import '../models/media_file.dart';
 
 class PhotoProvider extends StatefulWidget {
@@ -16,15 +15,14 @@ class PhotoProvider extends StatefulWidget {
   });
 
   @override
-  _PhotoProviderState createState() => _PhotoProviderState();
+  State<PhotoProvider> createState() => _PhotoProviderState();
 }
 
 class _PhotoProviderState extends State<PhotoProvider> {
-  VideoPlayerController? _controller;
-  late MediaFile media;
+  late MediaFile _media;
   @override
   void initState() {
-    media = widget.media;
+    _media = widget.media;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       initMedia();
     });
@@ -32,28 +30,27 @@ class _PhotoProviderState extends State<PhotoProvider> {
   }
 
   Future<void> initMedia() async {
-    await media.getData();
+    await _media.getData();
     if (mounted) {
       setState(() {});
     }
   }
 
-  bool anyProcess = false;
   @override
   Widget build(BuildContext context) {
-    if (media != widget.media) {
-      media = widget.media;
-      if (media.data == null) {
+    if (_media != widget.media) {
+      _media = widget.media;
+      if (_media.data == null) {
         initMedia();
       }
     }
-    return media.data == null
-        ? Container(
+    return _media.data == null
+        ? SizedBox(
             width: widget.width,
             height: widget.height,
           )
         : Image.memory(
-            media.data!,
+            _media.data!,
             width: widget.width,
             height: widget.height,
             fit: widget.fit,

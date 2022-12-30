@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
+// ignore: depend_on_referenced_packages
 import 'package:gallery_picker/gallery_picker.dart';
 
 import '../main.dart';
@@ -20,12 +19,12 @@ class _MultipleMediasViewState extends State<MultipleMediasView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Destination Page"),
+        title: const Text("Destination Page"),
       ),
       body: Column(children: [
         const Spacer(),
-        Text("These are your selected medias"),
-        Divider(),
+        const Text("These are your selected medias"),
+        const Divider(),
         Expanded(
           flex: 5,
           child: Stack(children: [
@@ -85,7 +84,7 @@ class _MultipleMediasViewState extends State<MultipleMediasView> {
             for (int i = 0; i < widget.medias.length; i++)
               TextButton(
                   onPressed: () {
-                    pageIndex=i;
+                    pageIndex = i;
                     controller.animateToPage(i,
                         duration: const Duration(milliseconds: 500),
                         curve: Curves.easeIn);
@@ -100,7 +99,7 @@ class _MultipleMediasViewState extends State<MultipleMediasView> {
                         color: i == pageIndex ? Colors.red : Colors.grey),
                     child: Text(
                       (i + 1).toString(),
-                      style: TextStyle(fontSize: 16, color: Colors.black),
+                      style: const TextStyle(fontSize: 16, color: Colors.black),
                     ),
                   ))
           ]),

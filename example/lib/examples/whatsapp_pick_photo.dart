@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
+// ignore: depend_on_referenced_packages
 import 'package:gallery_picker/gallery_picker.dart';
+// ignore: depend_on_referenced_packages
 import 'package:camera/camera.dart';
 import 'package:gallery_picker_example/examples/multiple_medias.dart';
 
@@ -216,7 +216,7 @@ class _WhatsappPickPhotoState extends State<WhatsappPickPhoto> {
                           setState(() {
                             anyProcess = true;
                           });
-                          Future.delayed(Duration(milliseconds: 100))
+                          Future.delayed(const Duration(milliseconds: 100))
                               .then((value) => setState(() {
                                     anyProcess = false;
                                   }));

@@ -25,12 +25,13 @@ class GridViewStatic extends StatelessWidget {
   Widget build(BuildContext context) {
     return verticalView();
   }
+
   Widget horizontalView() {
     return SizedBox(
       height: size,
       child: Column(
         children: [
-          for (int i = 0; i < crossAxisCount; i+=crossAxisCount)
+          for (int i = 0; i < crossAxisCount; i += crossAxisCount)
             Padding(
               padding: EdgeInsets.only(
                   bottom: i != children.length - 1 ? mainAxisSpacing : 0),
@@ -38,7 +39,9 @@ class GridViewStatic extends StatelessWidget {
                 height: size / crossAxisCount,
                 child: Row(
                   children: [
-                    for (int j = i; j < i + (children.length~/crossAxisCount)+1; j++)
+                    for (int j = i;
+                        j < i + (children.length ~/ crossAxisCount) + 1;
+                        j++)
                       j < children.length
                           ? Expanded(
                               child: Padding(
@@ -48,7 +51,7 @@ class GridViewStatic extends StatelessWidget {
                                       : 0),
                               child: children[j],
                             ))
-                          : Spacer()
+                          : const Spacer()
                   ],
                 ),
               ),
@@ -63,7 +66,7 @@ class GridViewStatic extends StatelessWidget {
       width: size,
       child: Column(
         children: [
-          for (int i = 0; i < children.length; i+=crossAxisCount)
+          for (int i = 0; i < children.length; i += crossAxisCount)
             SizedBox(
               width: size,
               height: (size / crossAxisCount) * childAspectRatio,
@@ -82,7 +85,7 @@ class GridViewStatic extends StatelessWidget {
                                       : 0),
                               child: children[j],
                             ))
-                          : Spacer()
+                          : const Spacer()
                   ],
                 ),
               ),

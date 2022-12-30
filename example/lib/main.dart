@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+// ignore: depend_on_referenced_packages
 import 'package:gallery_picker/gallery_picker.dart';
-import 'package:gallery_picker_example/examples/pick_medias_with_builder.dart';
-import 'examples/gallery_picker_example.dart';
 import 'examples/multiple_medias.dart';
-import 'examples/whatsapp_pick_photo.dart';
 
 void main() {
   runApp(const MyApp());
@@ -26,7 +23,9 @@ class MyApp extends StatelessWidget {
         /* dark theme settings */
       ),
       themeMode: ThemeMode.dark,
-      home: const GalleryPickerExample(),
+      home: const MyHomePage(
+        title: "Gallery Picker",
+      ),
     );
   }
 }
@@ -57,9 +56,8 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      
       appBar: AppBar(
-        title: Text("Pick medias"),
+        title: Text(widget.title),
       ),
       body: Center(
         child: Column(
@@ -179,7 +177,7 @@ class _MyHomePageState extends State<MyHomePage> {
         startWithRecent: true);
     if (medias != null) {
       setState(() {
-        this.selectedMedias += medias;
+        selectedMedias += medias;
       });
     }
   }
@@ -227,6 +225,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> getGalleryMedia() async {
+    // ignore: unused_local_variable
     GalleryMedia? allmedia = await GalleryPicker.collectGallery;
   }
 }

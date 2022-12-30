@@ -12,22 +12,22 @@ import 'picker_appbar.dart';
 import 'reload_gallery.dart';
 
 class GalleryPickerView extends StatefulWidget {
-  Config? config;
-  Function(List<MediaFile> selectedMedias) onSelect;
-  Widget Function(String tag, MediaFile media, BuildContext context)?
+  final Config? config;
+  final Function(List<MediaFile> selectedMedias) onSelect;
+  final Widget Function(String tag, MediaFile media, BuildContext context)?
       heroBuilder;
-  Widget Function(List<MediaFile> medias, BuildContext context)?
+  final Widget Function(List<MediaFile> medias, BuildContext context)?
       multipleMediasBuilder;
-  bool startWithRecent;
-  BottomSheetBarController? sheetController;
-  List<MediaFile>? initSelectedMedias;
-  bool singleMedia;
-  GalleryPickerView(
+  final bool startWithRecent;
+  final BottomSheetBarController? sheetController;
+  final List<MediaFile>? initSelectedMedias;
+  final bool singleMedia;
+  const GalleryPickerView(
       {super.key,
       this.config,
       required this.onSelect,
       this.initSelectedMedias,
-      this.singleMedia=false,
+      this.singleMedia = false,
       this.sheetController,
       this.heroBuilder,
       this.multipleMediasBuilder,
@@ -55,7 +55,7 @@ class _GalleryPickerState extends State<GalleryPickerView> {
           onSelect: widget.onSelect,
           heroBuilder: widget.heroBuilder,
           multipleMediasBuilder: widget.multipleMediasBuilder,
-          initSelectedMedias:widget.initSelectedMedias,
+          initSelectedMedias: widget.initSelectedMedias,
           isRecent: widget.startWithRecent));
       config = galleryController.config;
     }
@@ -181,8 +181,7 @@ class _GalleryPickerState extends State<GalleryPickerView> {
                                   ? AlbumMediasView(
                                       galleryAlbum: controller.recent!,
                                       controller: controller,
-                                      singleMedia:widget.singleMedia
-                                    )
+                                      singleMedia: widget.singleMedia)
                                   : const Center(
                                       child: CircularProgressIndicator(
                                       color: Colors.grey,
@@ -209,7 +208,7 @@ class _GalleryPickerState extends State<GalleryPickerView> {
                 galleryController = Get.put(PhoneGalleryController(config,
                     onSelect: widget.onSelect,
                     heroBuilder: widget.heroBuilder,
-                    initSelectedMedias:widget.initSelectedMedias,
+                    initSelectedMedias: widget.initSelectedMedias,
                     multipleMediasBuilder: widget.multipleMediasBuilder,
                     isRecent: widget.startWithRecent));
                 await controller.initializeAlbums();

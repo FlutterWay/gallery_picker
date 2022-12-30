@@ -9,7 +9,11 @@ class ThumbnailMediaFile extends StatelessWidget {
   final MediaFile file;
   final Color failIconColor;
   final Config config;
-  const ThumbnailMediaFile({super.key, required this.file, required this.failIconColor,required this.config});
+  const ThumbnailMediaFile(
+      {super.key,
+      required this.file,
+      required this.failIconColor,
+      required this.config});
 
   Color adjustFailedBgColor() {
     if (config.mode == Mode.dark) {

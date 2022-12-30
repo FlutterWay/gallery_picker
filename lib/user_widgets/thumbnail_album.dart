@@ -8,7 +8,12 @@ class ThumbnailAlbum extends StatelessWidget {
   final GalleryAlbum album;
   final Color failIconColor, backgroundColor;
   final Mode mode;
-  ThumbnailAlbum({super.key, required this.album, required this.failIconColor,required this.mode,required this.backgroundColor});
+  const ThumbnailAlbum(
+      {super.key,
+      required this.album,
+      required this.failIconColor,
+      required this.mode,
+      required this.backgroundColor});
 
   Color adjustFailedBgColor() {
     if (mode == Mode.dark) {

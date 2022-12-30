@@ -7,16 +7,16 @@ import '../../models/config.dart';
 import 'album_medias_view.dart';
 
 class AlbumPage extends StatelessWidget {
-  bool singleMedia;
-  AlbumPage(
+  final bool singleMedia;
+  final PhoneGalleryController controller;
+  final BottomSheetController? bottomSheetController;
+  final GalleryAlbum album;
+  const AlbumPage(
       {super.key,
       required this.album,
       required this.controller,
       required this.singleMedia,
       required this.bottomSheetController});
-  PhoneGalleryController controller;
-  BottomSheetController? bottomSheetController;
-  GalleryAlbum album;
   @override
   Widget build(BuildContext context) {
     Config config = controller.config;

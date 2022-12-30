@@ -4,16 +4,15 @@ import '../../../controller/gallery_controller.dart';
 import 'date_category_view.dart';
 import 'selected_medias_view.dart';
 
-// ignore: must_be_immutable
 class AlbumMediasView extends StatelessWidget {
-  PhoneGalleryController controller;
-  bool singleMedia;
-  AlbumMediasView(
+  final PhoneGalleryController controller;
+  final bool singleMedia;
+  const AlbumMediasView(
       {super.key,
       required this.galleryAlbum,
       required this.controller,
       required this.singleMedia});
-  GalleryAlbum galleryAlbum;
+  final GalleryAlbum galleryAlbum;
   @override
   Widget build(BuildContext context) {
     return Stack(

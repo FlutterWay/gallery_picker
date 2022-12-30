@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
+// ignore: depend_on_referenced_packages
 import 'package:gallery_picker/gallery_picker.dart';
 
 import '../main.dart';
@@ -18,7 +17,7 @@ class _PickMediasWithBuilderState extends State<PickMediasWithBuilder> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Pick Medias With Builder"),
+        title: const Text("Pick Medias With Builder"),
       ),
       body: Stack(
         children: [
@@ -36,7 +35,7 @@ class _PickMediasWithBuilderState extends State<PickMediasWithBuilder> {
                           color: Colors.blue,
                           borderRadius: BorderRadius.circular(20)),
                       alignment: Alignment.center,
-                      child: Text(
+                      child: const Text(
                         'Pick Medias With Builder',
                         style: TextStyle(color: Colors.white),
                       ),

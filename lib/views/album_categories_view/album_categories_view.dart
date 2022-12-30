@@ -4,11 +4,10 @@ import '../../models/config.dart';
 import '../../../controller/gallery_controller.dart';
 
 class AlbumCategoriesView extends StatelessWidget {
-  PhoneGalleryController controller;
-  late Config config;
-  AlbumCategoriesView(this.controller, {super.key}) {
-    config = controller.config;
-  }
+  final PhoneGalleryController controller;
+  final Config config;
+  AlbumCategoriesView(this.controller, {super.key})
+      : config = controller.config;
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(

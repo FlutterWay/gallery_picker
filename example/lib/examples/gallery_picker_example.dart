@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+// ignore: depend_on_referenced_packages
 import 'package:gallery_picker/gallery_picker.dart';
 
 class GalleryPickerExample extends StatefulWidget {
@@ -16,7 +17,7 @@ class _GalleryPickerExampleState extends State<GalleryPickerExample> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Pick medias"),
+        title: const Text("Pick medias"),
       ),
       body: Center(
         child: Column(

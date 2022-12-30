@@ -5,10 +5,10 @@ import '../../controller/gallery_controller.dart';
 import '../gallery_picker_view/tappable_appbar.dart';
 
 class AlbumAppBar extends StatelessWidget with PreferredSizeWidget {
-  PhoneGalleryController controller;
-  BottomSheetController? bottomSheetController;
-  GalleryAlbum album;
-  AlbumAppBar(
+  final PhoneGalleryController controller;
+  final BottomSheetController? bottomSheetController;
+  final GalleryAlbum album;
+  const AlbumAppBar(
       {super.key,
       required this.bottomSheetController,
       required this.album,
@@ -69,5 +69,5 @@ class AlbumAppBar extends StatelessWidget with PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => Size.fromHeight(48);
+  Size get preferredSize => const Size.fromHeight(48);
 }

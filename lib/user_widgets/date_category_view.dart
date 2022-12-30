@@ -5,15 +5,15 @@ import '/models/gallery_album.dart';
 import 'thumbnail_media.dart';
 
 class DateCategoryWiew extends StatelessWidget {
-  TextStyle? textStyle;
+  final TextStyle? textStyle;
   final Widget Function(MediaFile media, BuildContext context)?
       onMediaErrorBuilder;
-  DateCategoryWiew(
+  final DateCategory category;
+  const DateCategoryWiew(
       {super.key,
       required this.category,
       this.textStyle,
       this.onMediaErrorBuilder});
-  DateCategory category;
 
   int getRowCount() {
     if (category.files.length % 4 != 0) {

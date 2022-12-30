@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
+// ignore: depend_on_referenced_packages
 import 'package:gallery_picker/gallery_picker.dart';
 
 class BottomSheetExample extends StatefulWidget {
@@ -23,7 +22,7 @@ class _BottomSheetExampleState extends State<BottomSheetExample> {
           this.selectedMedias = selectedMedias;
           pageIndex = 0;
           if (this.selectedMedias.isNotEmpty) {
-            Future.delayed(Duration(milliseconds: 500)).then((value) {
+            Future.delayed(const Duration(milliseconds: 500)).then((value) {
               controller.animateToPage(0,
                   duration: const Duration(milliseconds: 500),
                   curve: Curves.easeIn);
@@ -129,7 +128,7 @@ class _BottomSheetExampleState extends State<BottomSheetExample> {
                   ],
                 ),
               ),
-              Spacer(
+              const Spacer(
                 flex: 1,
               ),
               TextButton(
@@ -141,7 +140,7 @@ class _BottomSheetExampleState extends State<BottomSheetExample> {
                   size: 40,
                 ),
               ),
-              Spacer(
+              const Spacer(
                 flex: 1,
               ),
             ],

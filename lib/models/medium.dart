@@ -1,5 +1,5 @@
 import 'package:photo_gallery/photo_gallery.dart';
 
 extension MediumExtension on Medium {
-  DateTime? get lastDate => this.modifiedDate ?? this.modifiedDate;
+  DateTime? get lastDate => modifiedDate ?? modifiedDate;
 }

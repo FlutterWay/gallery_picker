@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 import '../models/media_file.dart';
@@ -8,19 +9,20 @@ class VideoProvider extends StatefulWidget {
   final double? width, height;
 
   const VideoProvider({
+    super.key,
     required this.media,
     this.width,
     this.height,
   });
-
   @override
-  _VideoProviderState createState() => _VideoProviderState();
+  State<VideoProvider> createState() => _VideoProviderState();
 }
 
 class _VideoProviderState extends State<VideoProvider> {
   VideoPlayerController? _controller;
   File? _file;
   late MediaFile media;
+
   @override
   void initState() {
     media = widget.media;
@@ -42,7 +44,9 @@ class _VideoProviderState extends State<VideoProvider> {
         setState(() {});
       });
     } catch (e) {
-      print("Failed : $e");
+      if (kDebugMode) {
+        print("Failed : $e");
+      }
     }
   }
 
@@ -68,7 +72,7 @@ class _VideoProviderState extends State<VideoProvider> {
       initMedia();
     }
     return _controller == null || !_controller!.value.isInitialized
-        ? Container(
+        ? SizedBox(
             width: widget.width,
             height: widget.height,
           )

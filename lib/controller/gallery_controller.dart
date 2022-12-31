@@ -19,11 +19,15 @@ class PhoneGalleryController extends GetxController {
       {required this.onSelect,
       required this.heroBuilder,
       required this.isRecent,
-      List<MediaFile>? initSelectedMedias,
+      required List<MediaFile>? initSelectedMedias,
+      required List<MediaFile>? extraRecentMedia,
       required this.multipleMediasBuilder}) {
     this.config = config ?? Config();
     if (initSelectedMedias != null) {
       _selectedFiles = initSelectedMedias.map((e) => e).toList();
+    }
+    if (extraRecentMedia != null) {
+      _extraRecentMedia = extraRecentMedia.map((e) => e).toList();
     }
   }
   bool isRecent;
@@ -36,16 +40,28 @@ class PhoneGalleryController extends GetxController {
   List<GalleryAlbum> _galleryAlbums = [];
   List<GalleryAlbum> get galleryAlbums => _galleryAlbums;
   List<MediaFile> _selectedFiles = [];
+  List<MediaFile>? _extraRecentMedia;
   List<MediaFile> get selectedFiles => _selectedFiles;
   bool _isInitialized = false;
   bool get isInitialized => _isInitialized;
+  List<MediaFile>? get extraRecentMedia => _extraRecentMedia;
   bool _pickerMode = false;
   bool get pickerMode => _pickerMode;
 
-  void updateSelectedFiles(List<MediaFile> medias) {
-    _selectedFiles = medias;
+  void updateSelectedFiles(List<MediaFile> media) {
+    _selectedFiles = media.map((e) => e).toList();
     if (selectedFiles.isNotEmpty) {
       _pickerMode = true;
+    }
+    update();
+  }
+
+  void updateExtraRecentMedia(List<MediaFile> media) {
+    _extraRecentMedia = media.map((e) => e).toList();
+    GalleryAlbum? recentTmp = recent;
+    if (recentTmp != null) {
+      _extraRecentMedia!.removeWhere(
+          (element) => recentTmp.files.any((file) => element.id == file.id));
     }
     update();
   }
@@ -106,7 +122,15 @@ class PhoneGalleryController extends GetxController {
     GalleryMedia? media = await PhoneGalleryController.collectGallery;
     if (media != null) {
       _galleryAlbums = media.albums;
+      if (_extraRecentMedia != null) {
+        GalleryAlbum? recentTmp = recent;
+        if (recentTmp != null) {
+          _extraRecentMedia!.removeWhere((element) =>
+              recentTmp.files.any((file) => element.id == file.id));
+        }
+      }
     }
+
     _isInitialized = true;
     update();
   }
@@ -121,13 +145,13 @@ class PhoneGalleryController extends GetxController {
           await PhotoGallery.listAlbums(mediumType: MediumType.video);
 
       for (var photoAlbum in photoAlbums) {
-        GalleryAlbum entireGalleryAlbum = GalleryAlbum(album: photoAlbum);
+        GalleryAlbum entireGalleryAlbum = GalleryAlbum.album(photoAlbum);
         await entireGalleryAlbum.initialize();
         entireGalleryAlbum.setType = AlbumType.image;
         if (videoAlbums.any((element) => element.name == photoAlbum.name)) {
           Album videoAlbum = videoAlbums
               .singleWhere((element) => element.name == photoAlbum.name);
-          GalleryAlbum videoGalleryAlbum = GalleryAlbum(album: videoAlbum);
+          GalleryAlbum videoGalleryAlbum = GalleryAlbum.album(videoAlbum);
           await videoGalleryAlbum.initialize();
           DateTime? lastPhotoDate = entireGalleryAlbum.lastDate;
           DateTime? lastVideoDate = videoGalleryAlbum.lastDate;
@@ -165,7 +189,7 @@ class PhoneGalleryController extends GetxController {
         tempGalleryAlbums.add(entireGalleryAlbum);
       }
       for (var videoAlbum in videoAlbums) {
-        GalleryAlbum galleryVideoAlbum = GalleryAlbum(album: videoAlbum);
+        GalleryAlbum galleryVideoAlbum = GalleryAlbum.album(videoAlbum);
         await galleryVideoAlbum.initialize();
         galleryVideoAlbum.setType = AlbumType.video;
         tempGalleryAlbums.add(galleryVideoAlbum);
@@ -178,10 +202,31 @@ class PhoneGalleryController extends GetxController {
   }
 
   GalleryAlbum? get recent {
-    return _isInitialized
+    return _galleryAlbums.isNotEmpty
         ? _galleryAlbums.singleWhere((element) => element.album.name == "All")
         : null;
   }
+  //GalleryAlbum? get recent {
+  //  if (_isInitialized) {
+  //    GalleryAlbum? recent;
+  //    for (var album in _galleryAlbums) {
+  //      if (recent == null || (album.count > recent.count)) {
+  //        recent = album;
+  //      }
+  //    }
+  //    if (recent != null) {
+  //      return GalleryAlbum(
+  //          album: recent.album,
+  //          type: recent.type,
+  //          thumbnail: recent.thumbnail,
+  //          dateCategories: recent.dateCategories);
+  //    } else {
+  //      return null;
+  //    }
+  //  } else {
+  //    return null;
+  //  }
+  //}
 
   List<Medium> sortAlbumMediaDates(List<Medium> mediumList) {
     mediumList.sort((a, b) {

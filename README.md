@@ -83,12 +83,12 @@ Quick and simple usage example:
 ### Pick Single File
 
 ```dart
-MediaFile? media = await GalleryPicker.pickMedias(context: context,singleMedia: true);
+MediaFile? singleMedia = await GalleryPicker.pickMedia(context: context,singleMedia: true);
 ```
 ### Pick Multiple Files
 
 ```dart
-List<MediaFile>? medias = await GalleryPicker.pickMedias(context: context);
+List<MediaFile>? media = await GalleryPicker.pickMedia(context: context);
 ```
 
 ### Get All Media Files in Gallery
@@ -121,7 +121,8 @@ There is an example at `example/lib/examples/bottom_sheet_example.dart` to see h
         title: Text(widget.title),
       ),
       body: BottomSheetLayout(
-          onSelect: (medias) {},
+          config: Config()
+          onSelect: (media) {},
           child: Column(
             children: [
 ```
@@ -130,13 +131,13 @@ There is an example at `example/lib/examples/bottom_sheet_example.dart` to see h
 
 Within the Gallery Picker you can design a page that will be redirected after selecting any image(s).
 
-Note: There are two builder called multipleMediasBuilder and heroBuilder. If you designed both of them, multipleMediasBuilder will be shown after picking multiple media files, heroBuilder will be shown after picking a single media. Use given hero tag to view your Hero image. You can see a simple example below.
+Note: There are two builder called multipleMediaBuilder and heroBuilder. If you designed both of them, multipleMediaBuilder will be shown after picking multiple media files, heroBuilder will be shown after picking a single media. Use given hero tag to view your Hero image. You can see a simple example below.
 
 There is an example at `example/lib/examples/pick_medias_with_builder.dart` to see how it could be done.
 
 ```dart
-   GalleryPicker.pickMediasWithBuilder(
-        multipleMediasBuilder: ((medias, context) {
+   GalleryPicker.pickMediaWithBuilder(
+        multipleMediaBuilder: ((media, context) {
           return Scaffold(
             appBar: AppBar(
               title: const Text('Flippers Page'),
@@ -146,9 +147,9 @@ There is an example at `example/lib/examples/pick_medias_with_builder.dart` to s
               mainAxisSpacing: 5,
               crossAxisSpacing: 5,
               children: [
-                for (var media in medias)
+                for (var mediaFile in media)
                   ThumbnailMedia(
-                    media: media,
+                    media: mediaFile,
                   )
               ],
             ),
@@ -159,7 +160,7 @@ There is an example at `example/lib/examples/pick_medias_with_builder.dart` to s
                   MaterialPageRoute(
                       builder: (context) => MyHomePage(
                             title: "Selected Medias",
-                            medias: medias,
+                            medias: media,
                           )),
                 );
                 GalleryPicker.dispose();
@@ -220,7 +221,7 @@ A Config class is provided to user to customize your gallery picker. You can cus
 
 #### Customizable appereance features
 ```dart
-List<MediaFile>? medias = await GalleryPicker.pickMedias(
+List<MediaFile>? media = await GalleryPicker.pickMedia(
   context: context,
   config: Config(
     backgroundColor: Colors.white,
@@ -273,7 +274,7 @@ List<MediaFile>? medias = await GalleryPicker.pickMedias(
 
 #### Appearance Mode
 ```dart
-List<MediaFile>? medias = await GalleryPicker.pickMedias(
+List<MediaFile>? media = await GalleryPicker.pickMedia(
         context: context,
         config: Config(
           mode: Mode.dark
@@ -284,9 +285,19 @@ List<MediaFile>? medias = await GalleryPicker.pickMedias(
 #### Give an initial selected media files
 
 ```dart
-List<MediaFile>? medias = await GalleryPicker.pickMedias(
+List<MediaFile>? media = await GalleryPicker.pickMedia(
         context: context,
-        initSelectedMedias: this.selectedMedias,
+        initSelectedMedia: initSelectedMedia,
+        )
+```
+#### Give extra media files that will be included in recent
+You can give extra pictures to appear on the recent page. You should define these files with MediaFile.file()
+
+```dart
+MediaFile file = MediaFile.file(id: "id", file: File("path"), type: MediaType.image);
+List<MediaFile>? media = await GalleryPicker.pickMedia(
+        context: context,
+        extraRecentMedia: [file],
         )
 ```
 #### Select your priority page
@@ -294,7 +305,7 @@ List<MediaFile>? medias = await GalleryPicker.pickMedias(
 There are two pages called "Recent" and "Gallery". You could change the initial page.
 
 ```dart
-List<MediaFile>? medias = await GalleryPicker.pickMedias(
+List<MediaFile>? media = await GalleryPicker.pickMedia(
         context: context,
         startWithRecent: true,
         )

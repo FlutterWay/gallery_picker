@@ -136,7 +136,7 @@ packages:
     source: sdk
     version: "0.0.0"
   gallery_picker:
-    dependency: "direct overridden"
+    dependency: "direct dev"
     description:
       path: ".."
       relative: true

@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import '../../controller/bottom_sheet_controller.dart';
 import '../../controller/gallery_controller.dart';
 import '../../models/config.dart';
+import '../../models/gallery_album.dart';
 import '../../models/media_file.dart';
 import '../album_categories_view/album_categories_view.dart';
 import '../album_view/album_page.dart';
@@ -13,24 +14,26 @@ import 'reload_gallery.dart';
 
 class GalleryPickerView extends StatefulWidget {
   final Config? config;
-  final Function(List<MediaFile> selectedMedias) onSelect;
+  final Function(List<MediaFile> selectedMedia) onSelect;
   final Widget Function(String tag, MediaFile media, BuildContext context)?
       heroBuilder;
-  final Widget Function(List<MediaFile> medias, BuildContext context)?
-      multipleMediasBuilder;
+  final Widget Function(List<MediaFile> media, BuildContext context)?
+      multipleMediaBuilder;
   final bool startWithRecent;
   final BottomSheetBarController? sheetController;
-  final List<MediaFile>? initSelectedMedias;
+  final List<MediaFile>? initSelectedMedia;
+  final List<MediaFile>? extraRecentMedia;
   final bool singleMedia;
   const GalleryPickerView(
       {super.key,
       this.config,
       required this.onSelect,
-      this.initSelectedMedias,
+      this.initSelectedMedia,
+      this.extraRecentMedia,
       this.singleMedia = false,
       this.sheetController,
       this.heroBuilder,
-      this.multipleMediasBuilder,
+      this.multipleMediaBuilder,
       this.startWithRecent = false});
 
   @override
@@ -54,8 +57,9 @@ class _GalleryPickerState extends State<GalleryPickerView> {
       galleryController = Get.put(PhoneGalleryController(widget.config,
           onSelect: widget.onSelect,
           heroBuilder: widget.heroBuilder,
-          multipleMediasBuilder: widget.multipleMediasBuilder,
-          initSelectedMedias: widget.initSelectedMedias,
+          multipleMediasBuilder: widget.multipleMediaBuilder,
+          initSelectedMedias: widget.initSelectedMedia,
+          extraRecentMedia: widget.extraRecentMedia,
           isRecent: widget.startWithRecent));
       config = galleryController.config;
     }
@@ -83,10 +87,15 @@ class _GalleryPickerState extends State<GalleryPickerView> {
     super.dispose();
   }
 
+  GalleryAlbum? selectedAlbum;
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     return GetBuilder<PhoneGalleryController>(builder: (controller) {
+      if (controller.selectedAlbum == null && selectedAlbum != null) {
+        _scrollController = PageController(initialPage: 1);
+      }
+      selectedAlbum = controller.selectedAlbum;
       return GetInstance().isRegistered<PhoneGalleryController>()
           ? controller.selectedAlbum == null
               ? Scaffold(
@@ -208,8 +217,9 @@ class _GalleryPickerState extends State<GalleryPickerView> {
                 galleryController = Get.put(PhoneGalleryController(config,
                     onSelect: widget.onSelect,
                     heroBuilder: widget.heroBuilder,
-                    initSelectedMedias: widget.initSelectedMedias,
-                    multipleMediasBuilder: widget.multipleMediasBuilder,
+                    initSelectedMedias: widget.initSelectedMedia,
+                    extraRecentMedia: widget.extraRecentMedia,
+                    multipleMediasBuilder: widget.multipleMediaBuilder,
                     isRecent: widget.startWithRecent));
                 await controller.initializeAlbums();
                 if (bottomSheetController != null) {

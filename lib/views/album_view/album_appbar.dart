@@ -50,7 +50,7 @@ class AlbumAppBar extends StatelessWidget with PreferredSizeWidget {
   Widget getTitle() {
     if (!controller.pickerMode && controller.selectedFiles.isEmpty) {
       return Text(
-        album.album.name!,
+        album.name!,
         style: controller.config.appbarTextStyle,
       );
     } else if (controller.pickerMode && controller.selectedFiles.isEmpty) {

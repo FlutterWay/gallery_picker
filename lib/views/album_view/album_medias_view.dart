@@ -19,7 +19,7 @@ class AlbumMediasView extends StatelessWidget {
       children: [
         ListView(
           children: [
-            for (var category in galleryAlbum.dateCategories)
+            for (var category in checkCategories(galleryAlbum.dateCategories))
               DateCategoryWiew(
                 category: category,
                 controller: controller,
@@ -35,5 +35,32 @@ class AlbumMediasView extends StatelessWidget {
               ))
       ],
     );
+  }
+
+  List<DateCategory> checkCategories(List<DateCategory> categories) {
+    if (controller.isRecent &&
+        controller.extraRecentMedia != null &&
+        controller.extraRecentMedia!.isNotEmpty) {
+      List<DateCategory> categoriesTmp = categories.map((e) => e).toList();
+      int index = categoriesTmp
+          .indexWhere((element) => element.name == controller.config.recent);
+      if (index != -1) {
+        DateCategory category = DateCategory(files: [
+          ...controller.extraRecentMedia!,
+          ...categoriesTmp[index].files
+        ], name: categoriesTmp[index].name);
+        categoriesTmp[index] = category;
+        return categoriesTmp;
+      } else {
+        return [
+          DateCategory(
+              files: controller.extraRecentMedia!,
+              name: controller.config.recent),
+          ...categoriesTmp
+        ];
+      }
+    } else {
+      return categories;
+    }
   }
 }

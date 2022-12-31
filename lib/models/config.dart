@@ -13,7 +13,13 @@ class Config {
       appbarTextStyle,
       selectedMenuStyle,
       unselectedMenuStyle;
-  String recents, gallery, lastMonth, lastWeek, tapPhotoSelect, selected;
+  String recents,
+      recent,
+      gallery,
+      lastMonth,
+      lastWeek,
+      tapPhotoSelect,
+      selected;
   List<String> months;
   Mode mode;
 
@@ -28,6 +34,7 @@ class Config {
       TextStyle? textStyle,
       TextStyle? appbarTextStyle,
       this.recents = "RECENTS",
+      this.recent = "Recent",
       this.gallery = "GALLERY",
       this.lastMonth = "Last Month",
       this.lastWeek = "Last Week",

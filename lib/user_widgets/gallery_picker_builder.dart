@@ -3,9 +3,10 @@ import 'package:get/get.dart';
 import '../controller/picker_listener.dart';
 import '../models/media_file.dart';
 
-class FilesStreamBuilder extends StatelessWidget {
-  final Widget Function(List<MediaFile>? medias, BuildContext context) builder;
-  FilesStreamBuilder({super.key, required this.builder}) {
+class GalleryPickerBuilder extends StatelessWidget {
+  final Widget Function(List<MediaFile>? selectedFiles, BuildContext context)
+      builder;
+  GalleryPickerBuilder({super.key, required this.builder}) {
     Get.put(PickerListener());
   }
 

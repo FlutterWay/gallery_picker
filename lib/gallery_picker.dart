@@ -11,7 +11,7 @@ export 'user_widgets/album_categories_view.dart';
 export 'user_widgets/album_medias.dart';
 export 'user_widgets/date_category_view.dart';
 export 'user_widgets/thumbnail_album.dart';
-export 'user_widgets/files_stream_builder.dart';
+export 'user_widgets/gallery_picker_builder.dart';
 export 'user_widgets/photo_provider.dart';
 export 'user_widgets/video_provider.dart';
 export 'user_widgets/media_provider.dart';
@@ -48,45 +48,53 @@ class GalleryPicker {
     }
   }
 
-  static Future<List<MediaFile>?> pickMedias(
+  static Future<List<MediaFile>?> pickMedia(
       {Config? config,
       bool startWithRecent = false,
-      List<MediaFile>? initSelectedMedias,
+      bool singleMedia = false,
+      List<MediaFile>? initSelectedMedia,
+      List<MediaFile>? extraRecentMedia,
       required BuildContext context}) async {
-    List<MediaFile>? medias;
+    List<MediaFile>? media;
     await Navigator.push(
       context,
       MaterialPageRoute(
           builder: (context) => GalleryPickerView(
-                onSelect: (mediasTmp) {
-                  medias = mediasTmp;
+                onSelect: (mediaTmp) {
+                  media = mediaTmp;
                 },
                 config: config,
-                initSelectedMedias: initSelectedMedias,
+                singleMedia: singleMedia,
+                initSelectedMedia: initSelectedMedia,
+                extraRecentMedia: extraRecentMedia,
                 startWithRecent: startWithRecent,
               )),
     );
-    return medias;
+    return media;
   }
 
-  static Future<void> pickMediasWithBuilder(
+  static Future<void> pickMediaWithBuilder(
       {Config? config,
-      required Widget Function(List<MediaFile> medias, BuildContext context)?
-          multipleMediasBuilder,
+      required Widget Function(List<MediaFile> media, BuildContext context)?
+          multipleMediaBuilder,
       Widget Function(String tag, MediaFile media, BuildContext context)?
           heroBuilder,
-      List<MediaFile>? initSelectedMedias,
+      bool singleMedia = false,
+      List<MediaFile>? initSelectedMedia,
+      List<MediaFile>? extraRecentMedia,
       bool startWithRecent = false,
       required BuildContext context}) async {
     await Navigator.push(
       context,
       MaterialPageRoute(
           builder: (context) => GalleryPickerView(
-                onSelect: (medias) {},
-                multipleMediasBuilder: multipleMediasBuilder,
+                onSelect: (media) {},
+                multipleMediaBuilder: multipleMediaBuilder,
                 heroBuilder: heroBuilder,
+                singleMedia: singleMedia,
                 config: config,
-                initSelectedMedias: initSelectedMedias,
+                initSelectedMedia: initSelectedMedia,
+                extraRecentMedia: extraRecentMedia,
                 startWithRecent: startWithRecent,
               )),
     );

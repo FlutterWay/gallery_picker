@@ -1,25 +1,35 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:photo_gallery/photo_gallery.dart';
+import '../controller/gallery_controller.dart';
 import '/models/media_file.dart';
 import '/models/medium.dart';
+import 'config.dart';
 
 class GalleryAlbum {
-  Album album;
+  late Album album;
   late List<int>? thumbnail;
   List<DateCategory> dateCategories = [];
+  late AlbumType type;
   int get count =>
       dateCategories.expand((element) => element.files).toList().length;
   String? get name => album.name;
+
+  GalleryAlbum.album(this.album);
+
+  GalleryAlbum(
+      {required this.album,
+      required this.type,
+      this.thumbnail,
+      this.dateCategories = const []});
 
   List<MediaFile> get medias {
     return dateCategories
         .expand<MediaFile>((element) => element.files)
         .toList();
   }
-
-  late AlbumType type;
 
   set setType(AlbumType type) {
     this.type = type;
@@ -35,10 +45,6 @@ class GalleryAlbum {
         return Icons.perm_media_outlined;
     }
   }
-
-  GalleryAlbum({
-    required this.album,
-  });
 
   Future<void> initialize() async {
     List<DateCategory> dateCategory = [];
@@ -76,14 +82,15 @@ class GalleryAlbum {
       dateCategories.expand((element) => element.files).toList();
 
   String getDateCategory(Medium mediaFile) {
+    Config config = Get.find<PhoneGalleryController>().config;
     if (daysBetween(mediaFile.lastDate!) <= 3) {
-      return "Recent";
+      return config.recent;
     } else if (daysBetween(mediaFile.lastDate!) > 3 &&
         daysBetween(mediaFile.lastDate!) <= 7) {
-      return "Last week";
+      return config.lastWeek;
     } else if (daysBetween(mediaFile.lastDate!) > 7 &&
         daysBetween(mediaFile.lastDate!) <= 31) {
-      return "Last month";
+      return config.lastMonth;
     } else if (daysBetween(mediaFile.lastDate!) > 31 &&
         daysBetween(mediaFile.lastDate!) <= 365) {
       return DateFormat.MMMM().format(mediaFile.lastDate!).toString();
@@ -140,31 +147,19 @@ class GalleryAlbum {
   }
 }
 
-List<String> dates = [
-  "Recent",
-  "Last week",
-  "Last month",
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December"
-];
-
 class DateCategory {
   String name;
   List<MediaFile> files;
   DateCategory({required this.files, required this.name});
 
   int getIndexOfCategory() {
-    int index = dates.indexOf(name);
+    Config config = Get.find<PhoneGalleryController>().config;
+    int index = [
+      config.recent,
+      config.lastWeek,
+      config.lastMonth,
+      config.months
+    ].indexOf(name);
     if (index == -1) {
       return 3000 - int.parse(name);
     } else {

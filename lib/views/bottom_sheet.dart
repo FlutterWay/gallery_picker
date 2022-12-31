@@ -8,12 +8,14 @@ import '../controller/bottom_sheet_controller.dart';
 class BottomSheetLayout extends StatefulWidget {
   final Widget child;
   final Config? config;
-  final List<MediaFile>? initSelectedMedias;
-  final Function(List<MediaFile> selectedMedias) onSelect;
+  final List<MediaFile>? initSelectedMedia;
+  final List<MediaFile>? extraRecentMedia;
+  final bool singleMedia;
+  final Function(List<MediaFile> selectedMedia) onSelect;
   final Widget Function(String tag, MediaFile media, BuildContext context)?
       heroBuilder;
-  final Widget Function(List<MediaFile> medias, BuildContext context)?
-      multipleMediasBuilder;
+  final Widget Function(List<MediaFile> media, BuildContext context)?
+      multipleMediaBuilder;
   final bool startWithRecent;
   BottomSheetLayout(
       {super.key,
@@ -21,13 +23,20 @@ class BottomSheetLayout extends StatefulWidget {
       required this.onSelect,
       this.config,
       this.heroBuilder,
-      this.initSelectedMedias,
-      this.multipleMediasBuilder,
+      this.initSelectedMedia,
+      this.extraRecentMedia,
+      this.singleMedia = false,
+      this.multipleMediaBuilder,
       this.startWithRecent = true}) {
-    if (initSelectedMedias != null &&
-        GetInstance().isRegistered<PhoneGalleryController>()) {
-      Get.find<PhoneGalleryController>()
-          .updateSelectedFiles(initSelectedMedias!);
+    if (GetInstance().isRegistered<PhoneGalleryController>()) {
+      if (initSelectedMedia != null) {
+        Get.find<PhoneGalleryController>()
+            .updateSelectedFiles(initSelectedMedia!);
+      }
+      if (extraRecentMedia != null) {
+        Get.find<PhoneGalleryController>()
+            .updateExtraRecentMedia(extraRecentMedia!);
+      }
     }
   }
 
@@ -97,8 +106,10 @@ class _BottomSheetLayoutState extends State<BottomSheetLayout> {
                   config: widget.config,
                   sheetController: bottomSheetBarController,
                   heroBuilder: widget.heroBuilder,
-                  multipleMediasBuilder: widget.multipleMediasBuilder,
-                  initSelectedMedias: widget.initSelectedMedias,
+                  multipleMediaBuilder: widget.multipleMediaBuilder,
+                  singleMedia: widget.singleMedia,
+                  initSelectedMedia: widget.initSelectedMedia,
+                  extraRecentMedia: widget.extraRecentMedia,
                   startWithRecent: widget.startWithRecent,
                 )
               : Container(
@@ -115,8 +126,10 @@ class _BottomSheetLayoutState extends State<BottomSheetLayout> {
                 config: widget.config,
                 sheetController: bottomSheetBarController,
                 heroBuilder: widget.heroBuilder,
-                multipleMediasBuilder: widget.multipleMediasBuilder,
-                initSelectedMedias: widget.initSelectedMedias,
+                singleMedia: widget.singleMedia,
+                multipleMediaBuilder: widget.multipleMediaBuilder,
+                initSelectedMedia: widget.initSelectedMedia,
+                extraRecentMedia: widget.extraRecentMedia,
                 startWithRecent: widget.startWithRecent,
               ),
               viewPicker: controller.isClosing ? false : viewCollapsedPicker,

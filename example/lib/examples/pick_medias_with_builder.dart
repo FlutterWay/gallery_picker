@@ -27,7 +27,7 @@ class _PickMediasWithBuilderState extends State<PickMediasWithBuilder> {
               children: <Widget>[
                 const Spacer(),
                 TextButton(
-                    onPressed: pickMediasWithBuilder,
+                    onPressed: pickMediaWithBuilder,
                     child: Container(
                       width: 300,
                       height: 60,
@@ -49,9 +49,9 @@ class _PickMediasWithBuilderState extends State<PickMediasWithBuilder> {
     );
   }
 
-  pickMediasWithBuilder() {
-    GalleryPicker.pickMediasWithBuilder(
-        multipleMediasBuilder: ((medias, context) {
+  pickMediaWithBuilder() {
+    GalleryPicker.pickMediaWithBuilder(
+        multipleMediaBuilder: ((medias, context) {
           return MultipleMediasView(medias);
         }),
         heroBuilder: (tag, media, context) {

@@ -3,10 +3,13 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:photo_gallery/photo_gallery.dart';
+import 'package:video_thumbnail/video_thumbnail.dart';
 import '../controller/gallery_controller.dart';
 
+enum MediaType { image, video }
+
 class MediaFile {
-  Medium medium;
+  late Medium medium;
   MediumType? type;
   Uint8List? thumbnail;
   Uint8List? data;
@@ -17,18 +20,39 @@ class MediaFile {
     type = medium.mediumType;
     id = medium.id;
   }
-  Future<void> getThumbnail() async {
+  MediaFile.file(
+      {required this.id, required this.file, required MediaType type}) {
+    this.type = type == MediaType.image ? MediumType.image : MediumType.video;
+    medium = Medium(id: id);
+  }
+
+  Future<Uint8List?> getThumbnail() async {
     try {
-      thumbnail =
-          Uint8List.fromList(await medium.getThumbnail(highQuality: true));
+      if (file != null) {
+        thumbnail = await VideoThumbnail.thumbnailData(
+          video: file!.path,
+          imageFormat: ImageFormat.JPEG,
+          maxWidth:
+              128, // specify the width of the thumbnail, let the height auto-scaled to keep the source aspect ratio
+          quality: 25,
+        );
+      } else {
+        thumbnail =
+            Uint8List.fromList(await medium.getThumbnail(highQuality: true));
+      }
     } catch (e) {
       thumbnailFailed = true;
     }
+    return thumbnail;
   }
 
   Future<File> getFile() async {
-    file = await medium.getFile();
-    return file!;
+    if (file == null) {
+      file = await medium.getFile();
+      return file!;
+    } else {
+      return file!;
+    }
   }
 
   Future<Uint8List> getData() async {

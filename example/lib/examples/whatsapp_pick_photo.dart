@@ -79,7 +79,7 @@ class _WhatsappPickPhotoState extends State<WhatsappPickPhoto> {
           this.selectedMedias = selectedMedias;
           setState(() {});
         },
-        initSelectedMedias: selectedMedias,
+        initSelectedMedia: selectedMedias,
         config: Config(mode: Mode.dark),
         child: Stack(
           children: [

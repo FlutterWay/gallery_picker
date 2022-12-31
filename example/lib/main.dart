@@ -163,28 +163,30 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: pickMedias,
+        onPressed: pickMedia,
         tooltip: 'Increment',
         child: const Icon(Icons.add),
       ),
     );
   }
 
-  Future<void> pickMedias() async {
-    List<MediaFile>? medias = await GalleryPicker.pickMedias(
+  Future<void> pickMedia() async {
+    List<MediaFile>? media = await GalleryPicker.pickMedia(
         context: context,
-        initSelectedMedias: selectedMedias,
+        config: Config(lastWeek: "Bu hafta"),
+        initSelectedMedia: selectedMedias,
+        extraRecentMedia: selectedMedias,
         startWithRecent: true);
-    if (medias != null) {
+    if (media != null) {
       setState(() {
-        selectedMedias += medias;
+        selectedMedias += media;
       });
     }
   }
 
-  pickMediasWithBuilder() {
-    GalleryPicker.pickMediasWithBuilder(
-        multipleMediasBuilder: ((medias, context) {
+  pickMediaWithBuilder() {
+    GalleryPicker.pickMediaWithBuilder(
+        multipleMediaBuilder: ((medias, context) {
           return MultipleMediasView(medias);
         }),
         heroBuilder: (tag, media, context) {

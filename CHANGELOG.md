@@ -34,7 +34,7 @@
 * MediaFile.file() added
 * Documantation changed
   
-## 0.0.7
+## 0.0.8
 
 * The widget called AlbumMediasView has changed to AlbumMediaView
 

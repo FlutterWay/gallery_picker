@@ -136,12 +136,12 @@ packages:
     source: sdk
     version: "0.0.0"
   gallery_picker:
-    dependency: "direct dev"
+    dependency: "direct overridden"
     description:
       path: ".."
       relative: true
     source: path
-    version: "0.0.7"
+    version: "0.0.8"
   get:
     dependency: transitive
     description:

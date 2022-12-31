@@ -8,7 +8,7 @@ export 'models/gallery_media.dart';
 export 'models/gallery_album.dart';
 export 'user_widgets/thumbnail_media.dart';
 export 'user_widgets/album_categories_view.dart';
-export 'user_widgets/album_medias.dart';
+export 'user_widgets/album_media_view.dart';
 export 'user_widgets/date_category_view.dart';
 export 'user_widgets/thumbnail_album.dart';
 export 'user_widgets/gallery_picker_builder.dart';

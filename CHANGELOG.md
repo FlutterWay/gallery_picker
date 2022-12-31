@@ -26,12 +26,15 @@
 
 ## 0.0.7
 
-* extraRecentMedia parameter added.
+* ExtraRecentMedia parameter added.
 * GalleryPicker.pickMedias() changed to GalleryPicker.pickMedia()
-* the parameter named initSelectedMedias changed to initSelectedMedia
-* the parameter named multipleMediasBuilder changed to multipleMediaBuilder
+* The parameter named initSelectedMedias changed to initSelectedMedia
+* The parameter named multipleMediasBuilder changed to multipleMediaBuilder
 * GalleryPicker.pickMediasWithBuilder() changed to GalleryPicker.pickMediaWithBuilder()
 * MediaFile.file() added
 * Documantation changed
+  
+## 0.0.7
 
+* The widget called AlbumMediasView has changed to AlbumMediaView
 

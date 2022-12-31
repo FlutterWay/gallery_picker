@@ -379,7 +379,7 @@ GalleryPickerBuilder(
   },
 )
 ```
-### AlbumMediasView
+### AlbumMediaView
 
 View all media files in the album sorted by its creation date
 
@@ -388,7 +388,7 @@ GalleryMedia? allmedia = await GalleryPicker.collectGallery;
 ```
 
 ```dart
-AlbumMediasView(
+AlbumMediaView(
   galleryAlbum: allmedia!.albums[0],
   textStyle: textStyle,
 )

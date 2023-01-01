@@ -46,3 +46,7 @@
 
 * Variable type of MediaFile.type changed to MediaType
 
+## 0.1.2
+
+* changes made
+

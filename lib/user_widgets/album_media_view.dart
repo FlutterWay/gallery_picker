@@ -5,8 +5,7 @@ import 'date_category_view.dart';
 // ignore: must_be_immutable
 class AlbumMediaView extends StatelessWidget {
   final TextStyle? textStyle;
-  const AlbumMediaView(
-      {super.key, required this.galleryAlbum, this.textStyle});
+  const AlbumMediaView({super.key, required this.galleryAlbum, this.textStyle});
   final GalleryAlbum galleryAlbum;
   @override
   Widget build(BuildContext context) {

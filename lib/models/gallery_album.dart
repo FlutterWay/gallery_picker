@@ -82,7 +82,9 @@ class GalleryAlbum {
       dateCategories.expand((element) => element.files).toList();
 
   String getDateCategory(Medium mediaFile) {
-    Config config = Get.find<PhoneGalleryController>().config;
+    Config config = GetInstance().isRegistered<PhoneGalleryController>()
+        ? Get.find<PhoneGalleryController>().config
+        : Config();
     if (daysBetween(mediaFile.lastDate!) <= 3) {
       return config.recent;
     } else if (daysBetween(mediaFile.lastDate!) > 3 &&
@@ -153,7 +155,9 @@ class DateCategory {
   DateCategory({required this.files, required this.name});
 
   int getIndexOfCategory() {
-    Config config = Get.find<PhoneGalleryController>().config;
+    Config config = GetInstance().isRegistered<PhoneGalleryController>()
+        ? Get.find<PhoneGalleryController>().config
+        : Config();
     int index = [
       config.recent,
       config.lastWeek,

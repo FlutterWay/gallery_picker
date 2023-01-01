@@ -38,3 +38,7 @@
 
 * The widget called AlbumMediasView has changed to AlbumMediaView
 
+## 0.1.0
+
+* The problem at collectGallery function has solved
+

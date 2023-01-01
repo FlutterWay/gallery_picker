@@ -16,7 +16,7 @@ class MediaFile {
   late String id;
   bool thumbnailFailed = false;
   File? file;
-
+  bool _noMedium = false;
   bool get isVideo => type == MediaType.video;
   bool get isImage => type == MediaType.image;
 
@@ -27,6 +27,7 @@ class MediaFile {
     id = medium.id;
   }
   MediaFile.file({required this.id, required this.file, required this.type}) {
+    _noMedium = true;
     medium = Medium(
         id: id,
         mediumType:
@@ -34,21 +35,25 @@ class MediaFile {
   }
 
   Future<Uint8List?> getThumbnail() async {
-    try {
-      if (file != null) {
-        thumbnail = await VideoThumbnail.thumbnailData(
-          video: file!.path,
-          imageFormat: ImageFormat.JPEG,
-          maxWidth:
-              128, // specify the width of the thumbnail, let the height auto-scaled to keep the source aspect ratio
-          quality: 25,
-        );
-      } else {
-        thumbnail =
-            Uint8List.fromList(await medium.getThumbnail(highQuality: true));
+    if (thumbnail == null) {
+      try {
+        if (_noMedium) {
+          thumbnail = isVideo
+              ? await VideoThumbnail.thumbnailData(
+                  video: file!.path,
+                  imageFormat: ImageFormat.JPEG,
+                  maxWidth:
+                      128, // specify the width of the thumbnail, let the height auto-scaled to keep the source aspect ratio
+                  quality: 25,
+                )
+              : await getData();
+        } else {
+          thumbnail =
+              Uint8List.fromList(await medium.getThumbnail(highQuality: true));
+        }
+      } catch (e) {
+        thumbnailFailed = true;
       }
-    } catch (e) {
-      thumbnailFailed = true;
     }
     return thumbnail;
   }
@@ -66,7 +71,8 @@ class MediaFile {
     if (file == null) {
       await getFile();
     }
-    data = await file!.readAsBytes();
+    data ??= await file!.readAsBytes();
+
     return data!;
   }
 

@@ -53,3 +53,8 @@
 ## 0.1.3
 
 * something changed on thumbnail widget
+  
+
+## 0.1.4
+
+* unselect media issiue in initSelectedMedia solved

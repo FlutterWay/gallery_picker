@@ -29,6 +29,9 @@ class PhoneGalleryController extends GetxController {
     if (extraRecentMedia != null) {
       _extraRecentMedia = extraRecentMedia.map((e) => e).toList();
     }
+    if (selectedFiles.isNotEmpty) {
+      _pickerMode = true;
+    }
   }
   bool isRecent;
   Function(List<MediaFile> selectedMedias) onSelect;
@@ -74,7 +77,7 @@ class PhoneGalleryController extends GetxController {
   }
 
   void unselectMedia(MediaFile file) {
-    _selectedFiles.remove(file);
+    _selectedFiles.removeWhere((element) => element.id == file.id);
     if (_selectedFiles.isEmpty) {
       _pickerMode = false;
     }
@@ -83,7 +86,7 @@ class PhoneGalleryController extends GetxController {
   }
 
   void selectMedia(MediaFile file) {
-    if (!_selectedFiles.any((element) => element == file)) {
+    if (!_selectedFiles.any((element) => element.id == file.id)) {
       _selectedFiles.add(file);
     }
     if (!_pickerMode) {

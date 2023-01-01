@@ -316,7 +316,7 @@ GalleryPicker returns MediaFile list. You can reach out features below.
 
 [✔] Medium
 [✔] Id
-[✔] MediumType
+[✔] MediaType
 [✔] Thumbnail
 [✔] Check with thumbnailFailed if fetching thumbnail fails
 [✔] Check with fileFailed if getting file fails

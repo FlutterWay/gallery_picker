@@ -23,7 +23,7 @@ class ThumbnailMedia extends StatelessWidget {
             children: [
               if (media.thumbnailFailed && onErrorBuilder == null)
                 Icon(
-                  media.type == MediumType.image
+                  media.isImage
                       ? Icons.image_not_supported
                       : Icons.videocam_off_rounded,
                   color: Colors.grey,
@@ -44,9 +44,7 @@ class ThumbnailMedia extends StatelessWidget {
                     bottom: 10,
                     left: 10,
                     child: Icon(
-                      media.medium.mediumType == MediumType.video
-                          ? Icons.video_camera_back
-                          : null,
+                      media.isVideo ? Icons.video_camera_back : null,
                       color: Colors.white,
                       size: 20,
                     )),

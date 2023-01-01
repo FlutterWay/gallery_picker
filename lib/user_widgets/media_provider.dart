@@ -10,7 +10,7 @@ class MediaProvider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return media.type == photo_gallery.MediumType.image
+    return media.isImage
         ? PhotoProvider(
             media: media,
             width: width,

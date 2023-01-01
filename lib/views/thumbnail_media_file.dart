@@ -52,7 +52,7 @@ class ThumbnailMediaFile extends StatelessWidget {
                 Container(
                     color: adjustFailedBgColor(),
                     child: Icon(
-                      file.type == MediumType.image
+                      file.isImage
                           ? Icons.image_not_supported
                           : Icons.videocam_off_rounded,
                       size: 50,
@@ -75,9 +75,7 @@ class ThumbnailMediaFile extends StatelessWidget {
                     bottom: 10,
                     left: 10,
                     child: Icon(
-                      file.medium.mediumType == MediumType.video
-                          ? Icons.video_camera_back
-                          : null,
+                      file.isVideo ? Icons.video_camera_back : null,
                       color: Colors.white,
                       size: 20,
                     )),

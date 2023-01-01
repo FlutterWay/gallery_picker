@@ -41,4 +41,8 @@
 ## 0.1.0
 
 * The problem at collectGallery function has solved
+  
+## 0.1.1
+
+* Variable type of MediaFile.type changed to MediaType
 

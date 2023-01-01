@@ -10,20 +10,27 @@ enum MediaType { image, video }
 
 class MediaFile {
   late Medium medium;
-  MediumType? type;
+  late MediaType type;
   Uint8List? thumbnail;
   Uint8List? data;
   late String id;
   bool thumbnailFailed = false;
   File? file;
+
+  bool get isVideo => type == MediaType.video;
+  bool get isImage => type == MediaType.image;
+
   MediaFile({required this.medium}) {
-    type = medium.mediumType;
+    type = medium.mediumType == MediumType.video
+        ? MediaType.video
+        : MediaType.image;
     id = medium.id;
   }
-  MediaFile.file(
-      {required this.id, required this.file, required MediaType type}) {
-    this.type = type == MediaType.image ? MediumType.image : MediumType.video;
-    medium = Medium(id: id);
+  MediaFile.file({required this.id, required this.file, required this.type}) {
+    medium = Medium(
+        id: id,
+        mediumType:
+            type == MediaType.image ? MediumType.image : MediumType.video);
   }
 
   Future<Uint8List?> getThumbnail() async {

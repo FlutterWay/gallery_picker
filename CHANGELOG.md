@@ -50,6 +50,6 @@
 
 * changes made
 
-## 0.1.2
+## 0.1.3
 
 * something changed on thumbnail widget

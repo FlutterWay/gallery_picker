@@ -83,7 +83,7 @@ class _BottomSheetLayoutState extends State<BottomSheetLayout> {
 
   @override
   void dispose() {
-    controller.dispose();
+    controller.disposeController();
     super.dispose();
   }
 

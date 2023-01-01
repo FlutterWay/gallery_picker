@@ -58,3 +58,7 @@
 ## 0.1.4
 
 * unselect media issiue in initSelectedMedia solved
+
+## 0.1.5
+
+* changes made

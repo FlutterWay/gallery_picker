@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:photo_gallery/photo_gallery.dart';
 import '../../controller/bottom_sheet_controller.dart';
 import '../../controller/gallery_controller.dart';
 import '../../models/config.dart';
@@ -32,21 +31,33 @@ class SelectedMediasView extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.only(
                           top: 3.0, bottom: 3.0, right: 2),
-                      child: Container(
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(5),
-                            image: DecorationImage(
-                                fit: BoxFit.fill,
-                                image: ThumbnailProvider(
-                                  mediumId: selectedMedia.medium.id,
-                                  mediumType: selectedMedia.medium.mediumType,
-                                  highQuality: true,
-                                ))),
-                        child: const SizedBox(
-                          width: 47,
-                          height: 47,
-                        ),
-                      ),
+                      child: !selectedMedia.thumbnailFailed
+                          ? Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                image: DecorationImage(
+                                    fit: BoxFit.fill,
+                                    image: Image.memory(
+                                      selectedMedia.thumbnail!,
+                                      fit: BoxFit.fill,
+                                    ).image),
+                              ),
+                              child: const SizedBox(
+                                width: 47,
+                                height: 47,
+                              ),
+                            )
+                          : Container(
+                              width: 47,
+                              height: 47,
+                              alignment: Alignment.center,
+                              child: Icon(
+                                selectedMedia.isImage
+                                    ? Icons.image_not_supported
+                                    : Icons.videocam_off_rounded,
+                                color: Colors.grey,
+                              ),
+                            ),
                     ),
                 ],
               ),

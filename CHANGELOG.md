@@ -70,3 +70,7 @@
 ## 0.1.7
 
 * BottomSheetLayout doesn't ruin its child view anymore
+
+## 0.1.8
+
+* changes made

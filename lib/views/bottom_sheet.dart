@@ -160,7 +160,7 @@ class ViewCollapsed extends StatelessWidget {
     onBuild(context);
     return Container(
       height: 50,
-      color: Colors.red,
+      color: Colors.transparent,
       child: viewPicker ? picker : null,
     );
   }

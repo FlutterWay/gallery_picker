@@ -24,6 +24,7 @@ class GalleryPickerView extends StatefulWidget {
   final List<MediaFile>? initSelectedMedia;
   final List<MediaFile>? extraRecentMedia;
   final bool singleMedia;
+  final bool isCollapsedSheet;
   const GalleryPickerView(
       {super.key,
       this.config,
@@ -31,6 +32,7 @@ class GalleryPickerView extends StatefulWidget {
       this.initSelectedMedia,
       this.extraRecentMedia,
       this.singleMedia = false,
+      this.isCollapsedSheet = false,
       this.sheetController,
       this.heroBuilder,
       this.multipleMediaBuilder,
@@ -190,6 +192,7 @@ class _GalleryPickerState extends State<GalleryPickerView> {
                                   ? AlbumMediasView(
                                       galleryAlbum: controller.recent!,
                                       controller: controller,
+                                      isCollapsedSheet: widget.isCollapsedSheet,
                                       singleMedia: widget.singleMedia)
                                   : const Center(
                                       child: CircularProgressIndicator(
@@ -205,6 +208,7 @@ class _GalleryPickerState extends State<GalleryPickerView> {
                   controller: controller,
                   album: controller.selectedAlbum!,
                   singleMedia: widget.singleMedia,
+                  isCollapsedSheet: widget.isCollapsedSheet,
                   bottomSheetController: bottomSheetController,
                 )
           : ReloadGallery(

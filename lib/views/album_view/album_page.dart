@@ -11,11 +11,13 @@ class AlbumPage extends StatelessWidget {
   final PhoneGalleryController controller;
   final BottomSheetController? bottomSheetController;
   final GalleryAlbum album;
+  final bool isCollapsedSheet;
   const AlbumPage(
       {super.key,
       required this.album,
       required this.controller,
       required this.singleMedia,
+      required this.isCollapsedSheet,
       required this.bottomSheetController});
   @override
   Widget build(BuildContext context) {
@@ -29,6 +31,7 @@ class AlbumPage extends StatelessWidget {
       body: AlbumMediasView(
         galleryAlbum: album,
         controller: controller,
+        isCollapsedSheet: isCollapsedSheet,
         singleMedia: singleMedia,
       ),
     );

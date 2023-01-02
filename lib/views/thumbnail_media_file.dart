@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../models/config.dart';
+import '../controller/gallery_controller.dart';
 import '../models/mode.dart';
 import '/models/media_file.dart';
 import 'package:transparent_image/transparent_image.dart';
@@ -7,20 +7,22 @@ import 'package:transparent_image/transparent_image.dart';
 class ThumbnailMediaFile extends StatelessWidget {
   final MediaFile file;
   final Color failIconColor;
-  final Config config;
+  final PhoneGalleryController controller;
+  final bool isCollapsedSheet;
   const ThumbnailMediaFile(
       {super.key,
       required this.file,
       required this.failIconColor,
-      required this.config});
+      required this.isCollapsedSheet,
+      required this.controller});
 
   Color adjustFailedBgColor() {
-    if (config.mode == Mode.dark) {
+    if (controller.config.mode == Mode.dark) {
       return lighten(
-        config.backgroundColor,
+        controller.config.backgroundColor,
       );
     } else {
-      return darken(config.backgroundColor);
+      return darken(controller.config.backgroundColor);
     }
   }
 
@@ -57,7 +59,9 @@ class ThumbnailMediaFile extends StatelessWidget {
                       size: 50,
                       color: failIconColor,
                     ))
-              else if (file.thumbnail != null)
+              else if (file.thumbnail != null &&
+                  !isCollapsedSheet &&
+                  controller.heroBuilder != null)
                 Hero(
                   tag: file.medium.id,
                   child: FadeInImage(
@@ -66,6 +70,13 @@ class ThumbnailMediaFile extends StatelessWidget {
                     placeholder: MemoryImage(kTransparentImage),
                     image: MemoryImage(file.thumbnail!),
                   ),
+                )
+              else if (file.thumbnail != null && controller.heroBuilder == null)
+                FadeInImage(
+                  fadeInDuration: const Duration(milliseconds: 200),
+                  fit: BoxFit.cover,
+                  placeholder: MemoryImage(kTransparentImage),
+                  image: MemoryImage(file.thumbnail!),
                 )
               else
                 const SizedBox(),

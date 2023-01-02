@@ -62,3 +62,7 @@
 ## 0.1.5
 
 * changes made
+
+## 0.1.6
+
+* multiple hero with same id issue handled

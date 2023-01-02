@@ -9,8 +9,12 @@ class MediaView extends StatelessWidget {
   final MediaFile file;
   final PhoneGalleryController controller;
   final bool singleMedia;
+  final bool isCollapsedSheet;
   const MediaView(this.file,
-      {super.key, required this.controller, required this.singleMedia});
+      {super.key,
+      required this.controller,
+      required this.singleMedia,
+      required this.isCollapsedSheet});
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -64,10 +68,10 @@ class MediaView extends StatelessWidget {
             }
           },
           child: ThumbnailMediaFile(
-            file: file,
-            failIconColor: controller.config.appbarIconColor,
-            config: controller.config,
-          ),
+              file: file,
+              failIconColor: controller.config.appbarIconColor,
+              controller: controller,
+              isCollapsedSheet: isCollapsedSheet),
         ),
         if (file.isSelected(controller: controller)!)
           GestureDetector(

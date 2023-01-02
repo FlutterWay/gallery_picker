@@ -89,56 +89,66 @@ class _BottomSheetLayoutState extends State<BottomSheetLayout> {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<BottomSheetController>(builder: (controller) {
-      return BottomSheetBar(
-        willPopScope: true,
-        color: Colors.transparent,
-        locked:
-            (controller.sheetController.isExpanded && !controller.appBarTapping)
+    return Stack(
+      children: [
+        widget.child,
+        GetBuilder<BottomSheetController>(builder: (controller) {
+          return BottomSheetBar(
+            willPopScope: true,
+            color: Colors.transparent,
+            locked: (controller.sheetController.isExpanded &&
+                    !controller.appBarTapping)
                 ? true
                 : false,
-        controller: controller.sheetController,
-        expandedBuilder: (scrollController) {
-          check();
-          return controller.sheetController.isExpanded
-              ? GalleryPickerView(
-                  onSelect: widget.onSelect,
-                  config: widget.config,
-                  sheetController: bottomSheetBarController,
-                  heroBuilder: widget.heroBuilder,
-                  multipleMediaBuilder: widget.multipleMediaBuilder,
-                  singleMedia: widget.singleMedia,
-                  initSelectedMedia: widget.initSelectedMedia,
-                  extraRecentMedia: widget.extraRecentMedia,
-                  startWithRecent: widget.startWithRecent,
-                )
-              : Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height,
-                  color: Colors.transparent,
-                );
-        },
-        body: widget.child,
-        collapsed: GetBuilder<BottomSheetController>(
-          builder: (controller) => ViewCollapsed(
-              picker: GalleryPickerView(
-                onSelect: widget.onSelect,
-                config: widget.config,
-                sheetController: bottomSheetBarController,
-                heroBuilder: widget.heroBuilder,
-                singleMedia: widget.singleMedia,
-                multipleMediaBuilder: widget.multipleMediaBuilder,
-                initSelectedMedia: widget.initSelectedMedia,
-                extraRecentMedia: widget.extraRecentMedia,
-                startWithRecent: widget.startWithRecent,
-              ),
-              viewPicker: controller.isClosing ? false : viewCollapsedPicker,
-              onBuild: (context) {
-                collapsedContext = context;
-              }),
-        ),
-      );
-    });
+            controller: controller.sheetController,
+            expandedBuilder: (scrollController) {
+              check();
+              return controller.sheetController.isExpanded
+                  ? GalleryPickerView(
+                      onSelect: widget.onSelect,
+                      config: widget.config,
+                      sheetController: bottomSheetBarController,
+                      heroBuilder: widget.heroBuilder,
+                      multipleMediaBuilder: widget.multipleMediaBuilder,
+                      singleMedia: widget.singleMedia,
+                      initSelectedMedia: widget.initSelectedMedia,
+                      extraRecentMedia: widget.extraRecentMedia,
+                      startWithRecent: widget.startWithRecent,
+                    )
+                  : Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height,
+                      color: Colors.transparent,
+                    );
+            },
+            body: SizedBox(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+            ),
+            collapsed: GetBuilder<BottomSheetController>(
+              builder: (controller) => ViewCollapsed(
+                  picker: GalleryPickerView(
+                    onSelect: widget.onSelect,
+                    config: widget.config,
+                    sheetController: bottomSheetBarController,
+                    heroBuilder: widget.heroBuilder,
+                    singleMedia: widget.singleMedia,
+                    multipleMediaBuilder: widget.multipleMediaBuilder,
+                    initSelectedMedia: widget.initSelectedMedia,
+                    isCollapsedSheet: true,
+                    extraRecentMedia: widget.extraRecentMedia,
+                    startWithRecent: widget.startWithRecent,
+                  ),
+                  viewPicker:
+                      controller.isClosing ? false : viewCollapsedPicker,
+                  onBuild: (context) {
+                    collapsedContext = context;
+                  }),
+            ),
+          );
+        }),
+      ],
+    );
   }
 }
 

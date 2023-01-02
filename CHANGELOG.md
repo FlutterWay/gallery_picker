@@ -66,3 +66,7 @@
 ## 0.1.6
 
 * multiple hero with same id issue handled
+
+## 0.1.7
+
+* BottomSheetLayout doesn't ruin its child view anymore

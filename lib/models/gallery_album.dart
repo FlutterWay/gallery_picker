@@ -162,7 +162,7 @@ class DateCategory {
       config.recent,
       config.lastWeek,
       config.lastMonth,
-      config.months
+      ...config.months
     ].indexOf(name);
     if (index == -1) {
       return 3000 - int.parse(name);

@@ -78,3 +78,7 @@
 ## 0.1.9
 
 * changes made
+
+## 0.2.0
+
+* upgrading 0.2.0

@@ -90,3 +90,7 @@
 ## 0.2.2
 
 * thumbnail's resolotion upgraded
+
+## 0.2.3
+
+* thumbnail's resolotion upgraded

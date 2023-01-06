@@ -86,3 +86,7 @@
 ## 0.2.1
 
 * thumbnail's resolotion upgraded
+
+## 0.2.2
+
+* thumbnail's resolotion upgraded

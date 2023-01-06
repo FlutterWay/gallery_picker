@@ -44,7 +44,7 @@ class MediaFile {
                   imageFormat: ImageFormat.JPEG,
                   maxWidth:
                       128, // specify the width of the thumbnail, let the height auto-scaled to keep the source aspect ratio
-                  quality: 0,
+                  quality: 100,
                 )
               : await getData();
         } else {

@@ -2,7 +2,7 @@
 
 Gallery Picker is a flutter package that will allow you to pick media file(s), manage and navigate inside your gallery with modern tools and views.
 
-<img src="https://raw.githubusercontent.com/FlutterWay/files/main/galleryPickerSlide.png" width="1200"/>
+<img src="https://raw.githubusercontent.com/FlutterWay/files/main/gallery_picker_views/gallery_picker_poster.png" width="1200"/>
 
 ## Features
 
@@ -32,6 +32,8 @@ Gallery Picker is a flutter package that will allow you to pick media file(s), m
 
 [✔] Examples provided (example/lib/examples) 
 
+[✔] Permission requests handled within the library
+
 [✔] Null-safety
 
 You could find the code samples of the given gifs below in `/example/lib/examples` folder. 
@@ -40,16 +42,16 @@ You could find the code samples of the given gifs below in `/example/lib/example
     <table>
         <tr>
             <td style="text-align: center">
-                <img src="https://raw.githubusercontent.com/FlutterWay/files/main/gallery_picker_light.gif" width="200"/>
+                <img src="https://raw.githubusercontent.com/FlutterWay/files/main/gallery_picker_views/gallery_picker_light.gif" width="200"/>
             </td>            
             <td style="text-align: center">
-                <img src="https://raw.githubusercontent.com/FlutterWay/files/main/gallery_picker_dark.gif" width="200"/>
+                <img src="https://raw.githubusercontent.com/FlutterWay/files/main/gallery_picker_views/gallery_picker_dark.gif" width="200"/>
             </td>
             <td style="text-align: center">
-                <img src="https://raw.githubusercontent.com/FlutterWay/files/main/gallery_picker_destination.gif" width="200" />
+                <img src="https://raw.githubusercontent.com/FlutterWay/files/main/gallery_picker_views/gallery_picker_destination.gif" width="200" />
             </td>
             <td style="text-align: center">
-                <img src="https://raw.githubusercontent.com/FlutterWay/files/main/camera_page.gif" width="200" />
+                <img src="https://raw.githubusercontent.com/FlutterWay/files/main/gallery_picker_views/camera_page.gif" width="200" />
             </td>
         </tr> 
     </table>
@@ -107,24 +109,23 @@ Dispose listener
 GalleryPicker.disposeSelectedFilesListener();
 ```
 
-### BottomSheetLayout
+### PickerScaffold
 
-Gallery Picker could also work as a bottom sheet. Wrap your scaffold's body with BottomSheetLayout 
+Gallery Picker could also work as a bottom sheet. Use PickerScaffold instead your Scaffold.
 
 There is an example at `example/lib/examples/bottom_sheet_example.dart` to see how it could be done.
 
 ```dart
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: BottomSheetLayout(
-          config: Config()
-          onSelect: (media) {},
-          child: Column(
-            children: [
+    return PickerScaffold(
+      backgroundColor: Colors.transparent,
+      onSelect: (media) {},
+      initSelectedMedia: initMedia,
+      config: Config(mode: Mode.dark),
+      body: Container(),
+    )
+  }
 ```
 
 ### Customizable destination page
@@ -225,6 +226,7 @@ List<MediaFile>? media = await GalleryPicker.pickMedia(
   context: context,
   config: Config(
     backgroundColor: Colors.white,
+    permissionDeniedPage:PermissionDeniedPage(),
     appbarColor: Colors.white,
     bottomSheetColor: const Color.fromARGB(255, 247, 248, 250),
     appbarIconColor: const Color.fromARGB(255, 130, 141, 148),
@@ -326,6 +328,19 @@ GalleryPicker returns MediaFile list. You can reach out features below.
 [✔] getData function
 [✔] Check if the file selected in gallery picker
 
+## Permission
+Required permissions will be requested when gallery picker is launched. In case of user's rejection of request, the problem will be handled within gallery picker package.  
+
+<img src="https://raw.githubusercontent.com/FlutterWay/files/main/gallery_picker_views/permission_denied.gif" width="200" />
+
+### Customizing Permission Denied Page
+
+```dart
+Config(
+   permissionDeniedPage: PermissionDeniedPage(),
+)
+```
+
 ## Ready-to-use widgets
 
 ### ThumbnailMedia
@@ -412,6 +427,44 @@ AlbumCategoriesView(
   onPressed: onPressed,
 )
 ```
+
+## Breaking Changes From 0.2.3
+
+### BottomSheetLayout changed into PickerScaffold
+
+Before:
+
+```dart
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.title),
+      ),
+      body: BottomSheetLayout(
+          config: Config()
+          onSelect: (media) {},
+          child: Column(
+            children: [
+```
+
+Now:
+
+```dart
+  @override
+  Widget build(BuildContext context) {
+    return PickerScaffold(
+      backgroundColor: Colors.transparent,
+      onSelect: (media) {},
+      initSelectedMedia: initMedia,
+      config: Config(mode: Mode.dark),
+      body: Container(),
+    )
+  }
+```
+
+
+
 
 ## Examples
 Check out our examples!

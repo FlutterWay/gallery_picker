@@ -2,38 +2,47 @@ import 'package:flutter/material.dart';
 import 'package:gallery_picker/views/album_view/album_appbar.dart';
 import '../../../controller/gallery_controller.dart';
 import '../../../models/gallery_album.dart';
-import '../../controller/bottom_sheet_controller.dart';
-import '../../models/config.dart';
 import 'album_medias_view.dart';
 
 class AlbumPage extends StatelessWidget {
   final bool singleMedia;
   final PhoneGalleryController controller;
-  final BottomSheetController? bottomSheetController;
-  final GalleryAlbum album;
-  final bool isCollapsedSheet;
+  final GalleryAlbum? album;
+  final bool isBottomSheet;
   const AlbumPage(
       {super.key,
       required this.album,
       required this.controller,
       required this.singleMedia,
-      required this.isCollapsedSheet,
-      required this.bottomSheetController});
+      required this.isBottomSheet});
   @override
   Widget build(BuildContext context) {
-    Config config = controller.config;
-    return Scaffold(
-      backgroundColor: config.backgroundColor,
-      appBar: AlbumAppBar(
-          bottomSheetController: bottomSheetController,
-          album: album,
-          controller: controller),
-      body: AlbumMediasView(
-        galleryAlbum: album,
-        controller: controller,
-        isCollapsedSheet: isCollapsedSheet,
-        singleMedia: singleMedia,
-      ),
-    );
+    return WillPopScope(
+        child: Scaffold(
+          backgroundColor: controller.config.backgroundColor,
+          appBar: album != null
+              ? AlbumAppBar(
+                  album: album!,
+                  controller: controller,
+                  isBottomSheet: isBottomSheet,
+                )
+              : null,
+          body: album != null
+              ? AlbumMediasView(
+                  galleryAlbum: album!,
+                  controller: controller,
+                  isBottomSheet: isBottomSheet,
+                  singleMedia: singleMedia,
+                )
+              : Center(
+                  child: Text(
+                  "No Album Found",
+                  style: controller.config.textStyle,
+                )),
+        ),
+        onWillPop: () async {
+          controller.backToPicker();
+          return false;
+        });
   }
 }

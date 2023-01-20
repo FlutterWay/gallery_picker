@@ -10,7 +10,7 @@ import 'config.dart';
 
 class GalleryAlbum {
   late Album album;
-  late List<int>? thumbnail;
+  List<int>? thumbnail;
   List<DateCategory> dateCategories = [];
   late AlbumType type;
   int get count =>
@@ -49,8 +49,8 @@ class GalleryAlbum {
   Future<void> initialize() async {
     List<DateCategory> dateCategory = [];
     for (var medium in sortAlbumMediaDates((await album.listMedia()).items)) {
-      MediaFile mediaFile = MediaFile(medium: medium);
-      String name = getDateCategory(medium);
+      MediaFile mediaFile = MediaFile.medium(medium);
+      String name = getDateCategory(mediaFile);
       if (dateCategory.any((element) => element.name == name)) {
         dateCategory
             .singleWhere((element) => element.name == name)
@@ -71,8 +71,9 @@ class GalleryAlbum {
   }
 
   DateTime? get lastDate {
-    if (dateCategories.isNotEmpty) {
-      return dateCategories.first.files.first.medium.lastDate;
+    if (dateCategories.isNotEmpty &&
+        dateCategories.first.files.first.medium != null) {
+      return dateCategories.first.files.first.medium!.lastDate;
     } else {
       return null;
     }
@@ -81,23 +82,22 @@ class GalleryAlbum {
   List<MediaFile> get files =>
       dateCategories.expand((element) => element.files).toList();
 
-  String getDateCategory(Medium mediaFile) {
+  String getDateCategory(MediaFile media) {
     Config config = GetInstance().isRegistered<PhoneGalleryController>()
         ? Get.find<PhoneGalleryController>().config
         : Config();
-    if (daysBetween(mediaFile.lastDate!) <= 3) {
+    DateTime? lastDate = media.lastModified;
+    lastDate = lastDate ?? DateTime.now();
+    if (daysBetween(lastDate) <= 3) {
       return config.recent;
-    } else if (daysBetween(mediaFile.lastDate!) > 3 &&
-        daysBetween(mediaFile.lastDate!) <= 7) {
+    } else if (daysBetween(lastDate) > 3 && daysBetween(lastDate) <= 7) {
       return config.lastWeek;
-    } else if (daysBetween(mediaFile.lastDate!) > 7 &&
-        daysBetween(mediaFile.lastDate!) <= 31) {
+    } else if (daysBetween(lastDate) > 7 && daysBetween(lastDate) <= 31) {
       return config.lastMonth;
-    } else if (daysBetween(mediaFile.lastDate!) > 31 &&
-        daysBetween(mediaFile.lastDate!) <= 365) {
-      return DateFormat.MMMM().format(mediaFile.lastDate!).toString();
+    } else if (daysBetween(lastDate) > 31 && daysBetween(lastDate) <= 365) {
+      return DateFormat.MMMM().format(lastDate).toString();
     } else {
-      return DateFormat.y().format(mediaFile.lastDate!).toString();
+      return DateFormat.y().format(lastDate).toString();
     }
   }
 
@@ -113,7 +113,7 @@ class GalleryAlbum {
       } else if (b.lastDate == null) {
         return -1;
       } else {
-        return a.lastDate!.compareTo(b.lastDate!);
+        return b.lastDate!.compareTo(a.lastDate!);
       }
     });
     return mediumList;
@@ -125,19 +125,19 @@ class GalleryAlbum {
 
     for (var category in dateCategories) {
       category.files.sort((a, b) {
-        if (a.medium.lastDate == null) {
+        if (a.medium == null) {
           return 1;
-        } else if (b.medium.lastDate == null) {
+        } else if (b.medium == null) {
           return -1;
         } else {
-          return b.medium.lastDate!.compareTo(a.medium.lastDate!);
+          return b.medium!.lastDate!.compareTo(a.medium!.lastDate!);
         }
       });
     }
   }
 
   void addFile(MediaFile file) {
-    String name = getDateCategory(file.medium);
+    String name = getDateCategory(file);
     if (dateCategories.any((element) => element.name == name)) {
       dateCategories
           .singleWhere((element) => element.name == name)

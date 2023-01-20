@@ -94,3 +94,9 @@
 ## 0.2.3
 
 * thumbnail's resolotion upgraded
+
+## 0.3.0
+
+* Package performance has been improved
+* BottomSheetLayout changed into PickerScaffold
+* PermissionDeniedPage added

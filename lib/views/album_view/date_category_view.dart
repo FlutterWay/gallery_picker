@@ -8,13 +8,13 @@ class DateCategoryWiew extends StatelessWidget {
   final PhoneGalleryController controller;
   final bool singleMedia;
   final DateCategory category;
-  final bool isCollapsedSheet;
+  final bool isBottomSheet;
 
   const DateCategoryWiew(
       {super.key,
       required this.category,
       required this.controller,
-      required this.isCollapsedSheet,
+      required this.isBottomSheet,
       required this.singleMedia});
 
   int getRowCount() {
@@ -45,14 +45,14 @@ class DateCategoryWiew extends StatelessWidget {
               size: MediaQuery.of(context).size.width,
               padding: EdgeInsets.zero,
               crossAxisCount: 4,
-              mainAxisSpacing: 1.0,
-              crossAxisSpacing: 1.0,
+              mainAxisSpacing: 3.0,
+              crossAxisSpacing: 3.0,
               children: <Widget>[
                 ...category.files.map(
                   (medium) => MediaView(medium,
                       controller: controller,
                       singleMedia: singleMedia,
-                      isCollapsedSheet: isCollapsedSheet),
+                      isBottomSheet: isBottomSheet),
                 ),
               ],
             ),

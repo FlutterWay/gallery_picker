@@ -4,6 +4,7 @@ import 'mode.dart';
 
 class Config {
   late Widget selectIcon;
+  Widget? permissionDeniedPage;
   late Color backgroundColor,
       appbarColor,
       appbarIconColor,
@@ -33,6 +34,7 @@ class Config {
       TextStyle? unselectedMenuStyle,
       TextStyle? textStyle,
       TextStyle? appbarTextStyle,
+      this.permissionDeniedPage,
       this.recents = "RECENTS",
       this.recent = "Recent",
       this.gallery = "GALLERY",

@@ -1,7 +1,5 @@
-import 'package:bottom_sheet_bar/bottom_sheet_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../../controller/bottom_sheet_controller.dart';
 import '../../controller/gallery_controller.dart';
 import '../../models/config.dart';
 import '../../models/gallery_album.dart';
@@ -9,6 +7,7 @@ import '../../models/media_file.dart';
 import '../album_categories_view/album_categories_view.dart';
 import '../album_view/album_page.dart';
 import '../album_view/album_medias_view.dart';
+import 'permission_denied_view.dart';
 import 'picker_appbar.dart';
 import 'reload_gallery.dart';
 
@@ -20,11 +19,10 @@ class GalleryPickerView extends StatefulWidget {
   final Widget Function(List<MediaFile> media, BuildContext context)?
       multipleMediaBuilder;
   final bool startWithRecent;
-  final BottomSheetBarController? sheetController;
+  final bool isBottomSheet;
   final List<MediaFile>? initSelectedMedia;
   final List<MediaFile>? extraRecentMedia;
   final bool singleMedia;
-  final bool isCollapsedSheet;
   const GalleryPickerView(
       {super.key,
       this.config,
@@ -32,8 +30,7 @@ class GalleryPickerView extends StatefulWidget {
       this.initSelectedMedia,
       this.extraRecentMedia,
       this.singleMedia = false,
-      this.isCollapsedSheet = false,
-      this.sheetController,
+      this.isBottomSheet = false,
       this.heroBuilder,
       this.multipleMediaBuilder,
       this.startWithRecent = false});
@@ -44,42 +41,38 @@ class GalleryPickerView extends StatefulWidget {
 
 class _GalleryPickerState extends State<GalleryPickerView> {
   late PhoneGalleryController galleryController;
-  BottomSheetController? bottomSheetController;
-  late PageController _scrollController;
   bool noPhotoSeleceted = true;
   late Config config;
   @override
   void initState() {
-    _scrollController =
-        PageController(initialPage: widget.startWithRecent ? 0 : 1);
     if (GetInstance().isRegistered<PhoneGalleryController>()) {
       galleryController = Get.find<PhoneGalleryController>();
-      config = galleryController.config;
+      if (galleryController.configurationCompleted) {
+        galleryController.updateConfig(widget.config);
+      } else {
+        galleryController.configuration(widget.config,
+            onSelect: widget.onSelect,
+            startWithRecent: widget.startWithRecent,
+            heroBuilder: widget.heroBuilder,
+            multipleMediasBuilder: widget.multipleMediaBuilder,
+            initSelectedMedias: widget.initSelectedMedia,
+            extraRecentMedia: widget.extraRecentMedia,
+            isRecent: widget.startWithRecent);
+      }
     } else {
-      galleryController = Get.put(PhoneGalleryController(widget.config,
+      galleryController = Get.put(PhoneGalleryController());
+      galleryController.configuration(widget.config,
           onSelect: widget.onSelect,
+          startWithRecent: widget.startWithRecent,
           heroBuilder: widget.heroBuilder,
           multipleMediasBuilder: widget.multipleMediaBuilder,
           initSelectedMedias: widget.initSelectedMedia,
           extraRecentMedia: widget.extraRecentMedia,
-          isRecent: widget.startWithRecent));
-      config = galleryController.config;
+          isRecent: widget.startWithRecent);
     }
-
-    if (widget.sheetController != null) {
-      if (GetInstance().isRegistered<BottomSheetController>()) {
-        bottomSheetController = Get.find<BottomSheetController>();
-      } else {
-        bottomSheetController =
-            Get.put(BottomSheetController(widget.sheetController!));
-      }
-      bottomSheetController!.galleryController = galleryController;
-    }
+    config = galleryController.config;
     if (!galleryController.isInitialized) {
       galleryController.initializeAlbums();
-    }
-    if (galleryController.isRecent) {
-      _scrollController = PageController(initialPage: 0);
     }
     super.initState();
   }
@@ -90,144 +83,153 @@ class _GalleryPickerState extends State<GalleryPickerView> {
   }
 
   GalleryAlbum? selectedAlbum;
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     return GetBuilder<PhoneGalleryController>(builder: (controller) {
-      if (controller.selectedAlbum == null && selectedAlbum != null) {
-        _scrollController = PageController(initialPage: 1);
-      }
-      selectedAlbum = controller.selectedAlbum;
       return GetInstance().isRegistered<PhoneGalleryController>()
-          ? controller.selectedAlbum == null
-              ? Scaffold(
-                  backgroundColor: config.backgroundColor,
-                  appBar: PickerAppBar(
-                    controller: controller,
-                    bottomSheetController: bottomSheetController,
-                  ),
-                  body: Column(
-                    children: [
-                      Container(
-                        width: width,
-                        height: 48,
-                        color: config.appbarColor,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Container(
-                              decoration: controller.isRecent
-                                  ? BoxDecoration(
-                                      border: Border(
-                                      bottom: BorderSide(
-                                        color: config.underlineColor,
-                                        width: 3.0,
-                                      ),
-                                    ))
-                                  : null,
-                              height: 48,
-                              width: width / 2,
-                              child: TextButton(
-                                  onPressed: () {
-                                    _scrollController.animateTo(0,
-                                        duration:
-                                            const Duration(milliseconds: 50),
-                                        curve: Curves.easeIn);
-                                    setState(() {
-                                      controller.isRecent = true;
-                                      controller.switchPickerMode(false);
-                                    });
-                                  },
-                                  child: Text(config.recents,
-                                      style: controller.isRecent
-                                          ? config.selectedMenuStyle
-                                          : config.unselectedMenuStyle)),
+          ? controller.permissionGranted
+              ? PageView(
+                  controller: controller.pageController,
+                  physics: const NeverScrollableScrollPhysics(),
+                  children: [
+                    Scaffold(
+                      backgroundColor: config.backgroundColor,
+                      appBar: PickerAppBar(
+                        controller: controller,
+                        isBottomSheet: widget.isBottomSheet,
+                      ),
+                      body: Column(
+                        children: [
+                          Container(
+                            width: width,
+                            height: 48,
+                            color: config.appbarColor,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                Container(
+                                  decoration: controller.isRecent
+                                      ? BoxDecoration(
+                                          border: Border(
+                                          bottom: BorderSide(
+                                            color: config.underlineColor,
+                                            width: 3.0,
+                                          ),
+                                        ))
+                                      : null,
+                                  height: 48,
+                                  width: width / 2,
+                                  child: TextButton(
+                                      onPressed: () {
+                                        controller.pickerPageController
+                                            .animateToPage(0,
+                                                duration: const Duration(
+                                                    milliseconds: 50),
+                                                curve: Curves.easeIn);
+                                        setState(() {
+                                          controller.isRecent = true;
+                                          controller.switchPickerMode(false);
+                                        });
+                                      },
+                                      child: Text(config.recents,
+                                          style: controller.isRecent
+                                              ? config.selectedMenuStyle
+                                              : config.unselectedMenuStyle)),
+                                ),
+                                Container(
+                                  decoration: !controller.isRecent
+                                      ? BoxDecoration(
+                                          border: Border(
+                                          bottom: BorderSide(
+                                            color: config.underlineColor,
+                                            width: 3.0,
+                                          ),
+                                        ))
+                                      : null,
+                                  height: 48,
+                                  width: width / 2,
+                                  child: TextButton(
+                                      onPressed: () {
+                                        controller.pickerPageController
+                                            .animateToPage(1,
+                                                duration: const Duration(
+                                                    milliseconds: 50),
+                                                curve: Curves.easeIn);
+                                        controller.isRecent = false;
+                                        controller.switchPickerMode(false);
+                                      },
+                                      child: Text(
+                                        config.gallery,
+                                        style: controller.isRecent
+                                            ? config.unselectedMenuStyle
+                                            : config.selectedMenuStyle,
+                                      )),
+                                )
+                              ],
                             ),
-                            Container(
-                              decoration: !controller.isRecent
-                                  ? BoxDecoration(
-                                      border: Border(
-                                      bottom: BorderSide(
-                                        color: config.underlineColor,
-                                        width: 3.0,
-                                      ),
-                                    ))
-                                  : null,
-                              height: 48,
-                              width: width / 2,
-                              child: TextButton(
-                                  onPressed: () {
-                                    _scrollController.animateTo(width,
-                                        duration:
-                                            const Duration(milliseconds: 50),
-                                        curve: Curves.easeIn);
+                          ),
+                          Expanded(
+                            child: PageView(
+                                controller: controller.pickerPageController,
+                                onPageChanged: (value) {
+                                  if (value == 0) {
+                                    controller.isRecent = true;
+                                    controller.switchPickerMode(false);
+                                  } else {
                                     controller.isRecent = false;
                                     controller.switchPickerMode(false);
-                                  },
-                                  child: Text(
-                                    config.gallery,
-                                    style: controller.isRecent
-                                        ? config.unselectedMenuStyle
-                                        : config.selectedMenuStyle,
-                                  )),
-                            )
-                          ],
-                        ),
+                                  }
+                                },
+                                scrollDirection: Axis.horizontal,
+                                children: [
+                                  controller.isInitialized &&
+                                          controller.recent != null
+                                      ? AlbumMediasView(
+                                          galleryAlbum: controller.recent!,
+                                          controller: controller,
+                                          isBottomSheet: widget.isBottomSheet,
+                                          singleMedia: widget.singleMedia)
+                                      : const Center(
+                                          child: CircularProgressIndicator(
+                                          color: Colors.grey,
+                                        )),
+                                  AlbumCategoriesView(
+                                    controller: controller,
+                                    isBottomSheet: widget.isBottomSheet,
+                                    singleMedia: widget.singleMedia,
+                                  )
+                                ]),
+                          ),
+                        ],
                       ),
-                      Expanded(
-                        child: PageView(
-                            controller: _scrollController,
-                            onPageChanged: (value) {
-                              if (value == 0) {
-                                controller.isRecent = true;
-                                controller.switchPickerMode(false);
-                              } else {
-                                controller.isRecent = false;
-                                controller.switchPickerMode(false);
-                              }
-                            },
-                            scrollDirection: Axis.horizontal,
-                            children: [
-                              controller.isInitialized
-                                  ? AlbumMediasView(
-                                      galleryAlbum: controller.recent!,
-                                      controller: controller,
-                                      isCollapsedSheet: widget.isCollapsedSheet,
-                                      singleMedia: widget.singleMedia)
-                                  : const Center(
-                                      child: CircularProgressIndicator(
-                                      color: Colors.grey,
-                                    )),
-                              AlbumCategoriesView(controller)
-                            ]),
-                      ),
-                    ],
-                  ),
+                    ),
+                    AlbumPage(
+                        album: controller.selectedAlbum,
+                        controller: controller,
+                        singleMedia: widget.singleMedia,
+                        isBottomSheet: widget.isBottomSheet)
+                  ],
                 )
-              : AlbumPage(
-                  controller: controller,
-                  album: controller.selectedAlbum!,
-                  singleMedia: widget.singleMedia,
-                  isCollapsedSheet: widget.isCollapsedSheet,
-                  bottomSheetController: bottomSheetController,
-                )
+              : controller.config.permissionDeniedPage ??
+                  PermissionDeniedView(
+                    config: controller.config,
+                  )
           : ReloadGallery(
               config,
               onpressed: () async {
-                if (widget.sheetController != null) {
-                  bottomSheetController =
-                      Get.put(BottomSheetController(widget.sheetController!));
-                }
-                galleryController = Get.put(PhoneGalleryController(config,
+                galleryController = Get.put(PhoneGalleryController());
+                galleryController.configuration(widget.config,
                     onSelect: widget.onSelect,
+                    startWithRecent: widget.startWithRecent,
                     heroBuilder: widget.heroBuilder,
+                    multipleMediasBuilder: widget.multipleMediaBuilder,
                     initSelectedMedias: widget.initSelectedMedia,
                     extraRecentMedia: widget.extraRecentMedia,
-                    multipleMediasBuilder: widget.multipleMediaBuilder,
-                    isRecent: widget.startWithRecent));
-                await controller.initializeAlbums();
-                if (bottomSheetController != null) {
-                  bottomSheetController!.galleryController = galleryController;
+                    isRecent: widget.startWithRecent);
+                if (!controller.isInitialized) {
+                  await controller.initializeAlbums();
                 }
                 setState(() {});
               },

@@ -15,13 +15,13 @@ export 'user_widgets/gallery_picker_builder.dart';
 export 'user_widgets/photo_provider.dart';
 export 'user_widgets/video_provider.dart';
 export 'user_widgets/media_provider.dart';
-export 'views/bottom_sheet.dart';
+export 'views/picker_scaffold.dart';
 export 'views/gallery_picker_view/gallery_picker_view.dart';
+import 'package:bottom_sheet_scaffold/bottom_sheet_scaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:gallery_picker/models/gallery_media.dart';
 import 'package:get/get.dart';
 import '../../controller/gallery_controller.dart';
-import 'controller/bottom_sheet_controller.dart';
 import 'controller/picker_listener.dart';
 import 'models/config.dart';
 import 'models/media_file.dart';
@@ -42,9 +42,6 @@ class GalleryPicker {
   static void dispose() {
     if (GetInstance().isRegistered<PhoneGalleryController>()) {
       Get.find<PhoneGalleryController>().disposeController();
-    }
-    if (GetInstance().isRegistered<BottomSheetController>()) {
-      Get.find<BottomSheetController>().disposeController();
     }
   }
 
@@ -101,26 +98,35 @@ class GalleryPicker {
   }
 
   static Future<void> openSheet() async {
-    if (GetInstance().isRegistered<BottomSheetController>()) {
-      await Get.find<BottomSheetController>().open();
-    }
+    BottomSheetPanel.open();
   }
 
   static Future<void> closeSheet() async {
-    if (GetInstance().isRegistered<BottomSheetController>()) {
-      await Get.find<BottomSheetController>().close();
+    BottomSheetPanel.close();
+    if (GetInstance().isRegistered<PhoneGalleryController>()) {
+      Get.find<PhoneGalleryController>().resetBottomSheetView();
     }
   }
 
   static bool get isSheetOpened {
-    if (GetInstance().isRegistered<BottomSheetController>()) {
-      return Get.find<BottomSheetController>().sheetController.isExpanded;
-    } else {
-      return false;
-    }
+    return BottomSheetPanel.isOpen;
+  }
+
+  static bool get isSheetExpanded {
+    return BottomSheetPanel.isExpanded;
+  }
+
+  static bool get isSheetCollapsed {
+    return BottomSheetPanel.isCollapsed;
   }
 
   static Future<GalleryMedia?> get collectGallery async {
     return await PhoneGalleryController.collectGallery;
+  }
+
+  static Future<GalleryMedia?> get initializeGallery async {
+    final controller = Get.put(PhoneGalleryController());
+    await controller.initializeAlbums();
+    return controller.media;
   }
 }

@@ -15,13 +15,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.0"
-  bottom_sheet_bar:
+  bottom_sheet_scaffold:
     dependency: transitive
     description:
-      name: bottom_sheet_bar
+      name: bottom_sheet_scaffold
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.3.8"
+    version: "0.1.1"
   camera:
     dependency: "direct dev"
     description:
@@ -141,7 +141,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "0.2.3"
+    version: "0.3.0"
   get:
     dependency: transitive
     description:
@@ -191,13 +191,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.1.5"
-  measure_size:
-    dependency: transitive
-    description:
-      name: measure_size
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "4.0.0"
   meta:
     dependency: transitive
     description:
@@ -205,6 +198,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.8.0"
+  page_transition:
+    dependency: transitive
+    description:
+      name: page_transition
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.9"
   path:
     dependency: transitive
     description:
@@ -379,5 +379,5 @@ packages:
     source: hosted
     version: "0.5.3"
 sdks:
-  dart: ">=2.18.5 <3.0.0"
+  dart: ">=2.18.6 <3.0.0"
   flutter: ">=3.0.0"

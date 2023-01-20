@@ -17,20 +17,22 @@ class _WhatsappPickPhotoState extends State<WhatsappPickPhoto> {
   GalleryMedia? gallery;
   List<MediaFile> selectedMedias = [];
   List<CameraDescription>? cameras;
-  CameraLensDirection cameraLensDirection = CameraLensDirection.front;
+  CameraLensDirection cameraLensDirection = CameraLensDirection.back;
   @override
   void initState() {
     initCamera();
     fetchMedias();
     GalleryPicker.listenSelectedFiles.listen((medias) {
       selectedMedias = medias;
-      setState(() {});
+      if (mounted) {
+        setState(() {});
+      }
     });
     super.initState();
   }
 
   Future<void> fetchMedias() async {
-    gallery = await GalleryPicker.collectGallery;
+    gallery = await GalleryPicker.initializeGallery;
     setState(() {});
   }
 
@@ -72,211 +74,207 @@ class _WhatsappPickPhotoState extends State<WhatsappPickPhoto> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return PickerScaffold(
       backgroundColor: Colors.transparent,
-      body: BottomSheetLayout(
-        onSelect: (List<MediaFile> selectedMedias) {
-          this.selectedMedias = selectedMedias;
+      onSelect: (List<MediaFile> selectedMedias) {
+        this.selectedMedias = selectedMedias;
+        if (mounted) {
           setState(() {});
-        },
-        initSelectedMedia: selectedMedias,
-        config: Config(mode: Mode.dark),
-        child: Stack(
-          children: [
-            if (cameraController != null &&
-                cameraController!.value.isInitialized)
-              SizedBox(
-                height: MediaQuery.of(context).size.height,
-                child: CameraPreview(
-                  cameraController!,
-                ),
+        }
+      },
+      initSelectedMedia: selectedMedias,
+      config: Config(mode: Mode.dark),
+      body: Stack(
+        children: [
+          if (cameraController != null && cameraController!.value.isInitialized)
+            SizedBox(
+              height: MediaQuery.of(context).size.height,
+              child: CameraPreview(
+                cameraController!,
               ),
-            if (gallery != null && gallery!.recent != null)
-              Positioned(
-                bottom: 100,
-                child: SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  height: 65,
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    children: [
-                      for (var media in gallery!.recent!.files)
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 5),
-                          child: GestureDetector(
-                            onTap: () {
-                              if (selectedMedias.isEmpty) {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          MultipleMediasView([media])),
-                                );
-                              } else {
-                                selectedMedias.any(
-                                        (element) => element.id == media.id)
-                                    ? selectedMedias.removeWhere(
-                                        (element) => element.id == media.id)
-                                    : selectedMedias.add(media);
-                                setState(() {});
-                              }
-                            },
-                            onLongPress: () {
-                              if (selectedMedias
-                                  .any((element) => element.id == media.id)) {
-                                selectedMedias.removeWhere(
-                                    (element) => element.id == media.id);
-                              } else {
-                                selectedMedias.add(media);
-                              }
-                              setState(() {});
-                            },
-                            child: Container(
-                                width: 65,
-                                height: 65,
-                                decoration: BoxDecoration(
-                                    border: Border.all(
-                                        width: 2,
-                                        color: selectedMedias.any((element) =>
-                                                element.id == media.id)
-                                            ? Colors.red
-                                            : Colors.black)),
-                                child: Stack(
-                                  children: [
-                                    SizedBox(
-                                      width: 65,
-                                      height: 65,
-                                      child: ThumbnailMedia(
-                                        media: media,
-                                      ),
-                                    ),
-                                    if (selectedMedias.any(
-                                        (element) => element.id == media.id))
-                                      Container(
-                                        color: Colors.black.withOpacity(0.3),
-                                        alignment: Alignment.center,
-                                        child: const Icon(
-                                          Icons.check,
-                                          size: 30,
-                                          color: Colors.white,
-                                        ),
-                                      )
-                                  ],
-                                )),
-                          ),
-                        )
-                    ],
-                  ),
-                ),
-              ),
-            if (selectedMedias.isNotEmpty)
-              Positioned(
-                  bottom: 150,
-                  right: 10,
-                  child: FloatingActionButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                MultipleMediasView(selectedMedias)),
-                      );
-                    },
-                    mini: true,
-                    child: const Icon(
-                      Icons.check,
-                      color: Colors.white,
-                    ),
-                  )),
+            ),
+          if (gallery != null && gallery!.recent != null)
             Positioned(
-                bottom: 20,
-                child: SizedBox(
-                  width: MediaQuery.of(context).size.width,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      TextButton(
-                        onPressed: () {
-                          GalleryPicker.openSheet();
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                              color: Colors.black.withOpacity(0.5),
-                              shape: BoxShape.circle),
-                          padding: const EdgeInsets.all(8),
-                          child: const Icon(
-                            Icons.image,
-                            size: 20,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: () async {
-                          setState(() {
-                            anyProcess = true;
-                          });
-                          Future.delayed(const Duration(milliseconds: 100))
-                              .then((value) => setState(() {
-                                    anyProcess = false;
-                                  }));
-                        },
-                        onLongPressStart: (value) {
-                          setState(() {
-                            isRecording = true;
-                            anyProcess = true;
-                          });
-                        },
-                        onLongPressEnd: (value) async {
-                          setState(() {
-                            isRecording = false;
-                            anyProcess = false;
-                          });
-                        },
-                        child: Container(
-                          padding: const EdgeInsets.all(4),
-                          decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              border:
-                                  Border.all(width: 2, color: Colors.white)),
-                          width: isRecording ? 80 : 65,
-                          height: isRecording ? 80 : 65,
+              bottom: 100,
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width,
+                height: 65,
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  children: [
+                    for (var media in gallery!.recent!.files)
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 5),
+                        child: GestureDetector(
+                          onTap: () {
+                            if (selectedMedias.isEmpty) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        MultipleMediasView([media])),
+                              );
+                            } else {
+                              selectedMedias
+                                      .any((element) => element.id == media.id)
+                                  ? selectedMedias.removeWhere(
+                                      (element) => element.id == media.id)
+                                  : selectedMedias.add(media);
+                              setState(() {});
+                            }
+                          },
+                          onLongPress: () {
+                            if (selectedMedias
+                                .any((element) => element.id == media.id)) {
+                              selectedMedias.removeWhere(
+                                  (element) => element.id == media.id);
+                            } else {
+                              selectedMedias.add(media);
+                            }
+                            setState(() {});
+                          },
                           child: Container(
-                            decoration: BoxDecoration(
-                              color:
-                                  anyProcess ? Colors.red : Colors.transparent,
-                              shape: BoxShape.circle,
-                            ),
-                          ),
+                              width: 65,
+                              height: 65,
+                              decoration: BoxDecoration(
+                                  border: Border.all(
+                                      width: 2,
+                                      color: selectedMedias.any((element) =>
+                                              element.id == media.id)
+                                          ? Colors.red
+                                          : Colors.black)),
+                              child: Stack(
+                                children: [
+                                  SizedBox(
+                                    width: 65,
+                                    height: 65,
+                                    child: ThumbnailMedia(
+                                      media: media,
+                                    ),
+                                  ),
+                                  if (selectedMedias
+                                      .any((element) => element.id == media.id))
+                                    Container(
+                                      color: Colors.black.withOpacity(0.3),
+                                      alignment: Alignment.center,
+                                      child: const Icon(
+                                        Icons.check,
+                                        size: 30,
+                                        color: Colors.white,
+                                      ),
+                                    )
+                                ],
+                              )),
+                        ),
+                      )
+                  ],
+                ),
+              ),
+            ),
+          if (selectedMedias.isNotEmpty)
+            Positioned(
+                bottom: 150,
+                right: 10,
+                child: FloatingActionButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) =>
+                              MultipleMediasView(selectedMedias)),
+                    );
+                  },
+                  mini: true,
+                  child: const Icon(
+                    Icons.check,
+                    color: Colors.white,
+                  ),
+                )),
+          Positioned(
+              bottom: 20,
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    TextButton(
+                      onPressed: () {
+                        GalleryPicker.openSheet();
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: Colors.black.withOpacity(0.5),
+                            shape: BoxShape.circle),
+                        padding: const EdgeInsets.all(8),
+                        child: const Icon(
+                          Icons.image,
+                          size: 20,
+                          color: Colors.white,
                         ),
                       ),
-                      TextButton(
-                        onPressed: () {
-                          if (cameraLensDirection ==
-                              CameraLensDirection.front) {
-                            cameraLensDirection = CameraLensDirection.back;
-                          } else {
-                            cameraLensDirection = CameraLensDirection.front;
-                          }
-                          initCamera();
-                        },
+                    ),
+                    GestureDetector(
+                      onTap: () async {
+                        setState(() {
+                          anyProcess = true;
+                        });
+                        Future.delayed(const Duration(milliseconds: 100))
+                            .then((value) => setState(() {
+                                  anyProcess = false;
+                                }));
+                      },
+                      onLongPressStart: (value) {
+                        setState(() {
+                          isRecording = true;
+                          anyProcess = true;
+                        });
+                      },
+                      onLongPressEnd: (value) async {
+                        setState(() {
+                          isRecording = false;
+                          anyProcess = false;
+                        });
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.all(4),
+                        decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(width: 2, color: Colors.white)),
+                        width: isRecording ? 80 : 65,
+                        height: isRecording ? 80 : 65,
                         child: Container(
                           decoration: BoxDecoration(
-                              color: Colors.black.withOpacity(0.5),
-                              shape: BoxShape.circle),
-                          padding: const EdgeInsets.all(8),
-                          child: const Icon(
-                            Icons.cameraswitch,
-                            size: 20,
-                            color: Colors.white,
+                            color: anyProcess ? Colors.red : Colors.transparent,
+                            shape: BoxShape.circle,
                           ),
                         ),
                       ),
-                    ],
-                  ),
-                ))
-          ],
-        ),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        if (cameraLensDirection == CameraLensDirection.front) {
+                          cameraLensDirection = CameraLensDirection.back;
+                        } else {
+                          cameraLensDirection = CameraLensDirection.front;
+                        }
+                        initCamera();
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: Colors.black.withOpacity(0.5),
+                            shape: BoxShape.circle),
+                        padding: const EdgeInsets.all(8),
+                        child: const Icon(
+                          Icons.cameraswitch,
+                          size: 20,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ))
+        ],
       ),
     );
   }

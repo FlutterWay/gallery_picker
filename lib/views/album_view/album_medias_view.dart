@@ -7,14 +7,15 @@ import 'selected_medias_view.dart';
 class AlbumMediasView extends StatelessWidget {
   final PhoneGalleryController controller;
   final bool singleMedia;
-  final bool isCollapsedSheet;
+  final bool isBottomSheet;
   const AlbumMediasView(
       {super.key,
       required this.galleryAlbum,
       required this.controller,
-      required this.isCollapsedSheet,
+      required this.isBottomSheet,
       required this.singleMedia});
   final GalleryAlbum galleryAlbum;
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -26,7 +27,7 @@ class AlbumMediasView extends StatelessWidget {
                 category: category,
                 controller: controller,
                 singleMedia: singleMedia,
-                isCollapsedSheet: isCollapsedSheet,
+                isBottomSheet: isBottomSheet,
               ),
           ],
         ),
@@ -35,6 +36,7 @@ class AlbumMediasView extends StatelessWidget {
               alignment: Alignment.bottomCenter,
               child: SelectedMediasView(
                 controller: controller,
+                isBottomSheet: isBottomSheet,
               ))
       ],
     );

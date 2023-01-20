@@ -1,108 +1,66 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
-import 'package:get/get.dart';
 import 'package:photo_gallery/photo_gallery.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
-import '../controller/gallery_controller.dart';
 
 enum MediaType { image, video }
 
 class MediaFile {
-  late Medium medium;
-  late MediaType type;
+  Medium? _medium;
+  File? _file;
   Uint8List? thumbnail;
-  Uint8List? data;
-  late String id;
-  bool thumbnailFailed = false;
-  File? file;
-  bool _noMedium = false;
-  bool get isVideo => type == MediaType.video;
-  bool get isImage => type == MediaType.image;
+  late MediaType _type;
+  late String _id;
+  bool get isVideo => _type == MediaType.video;
+  bool get isImage => _type == MediaType.image;
+  Medium? get medium => _medium;
+  MediaType get type => _type;
+  String get id => _id;
+  File? get file => _file;
+  DateTime? get lastModified =>
+      _medium != null ? _medium!.modifiedDate : _file!.lastModifiedSync();
 
-  MediaFile({required this.medium}) {
-    type = medium.mediumType == MediumType.video
+  MediaFile.medium(Medium medium) {
+    _medium = medium;
+    _type = _medium!.mediumType == MediumType.video
         ? MediaType.video
         : MediaType.image;
-    id = medium.id;
+    _id = _medium!.id;
   }
-  MediaFile.file({required this.id, required this.file, required this.type}) {
-    _noMedium = true;
-    medium = Medium(
-        id: id,
-        mediumType:
-            type == MediaType.image ? MediumType.image : MediumType.video);
+  MediaFile.file(
+      {required String id, required File file, required MediaType type}) {
+    _file = file;
+    _id = id;
+    _type = type;
   }
 
-  Future<Uint8List?> getThumbnail() async {
-    if (thumbnail == null) {
-      try {
-        if (_noMedium) {
-          thumbnail = isVideo
-              ? await VideoThumbnail.thumbnailData(
-                  video: file!.path,
-                  imageFormat: ImageFormat.JPEG,
-                  quality: 100,
-                )
-              : await getData();
-        } else {
-          thumbnail =
-              Uint8List.fromList(await medium.getThumbnail(highQuality: true));
-        }
-      } catch (e) {
-        thumbnailFailed = true;
-      }
+  Future<Uint8List> getThumbnail({bool highQuality = true}) async {
+    if (_medium == null) {
+      thumbnail = isVideo
+          ? (await VideoThumbnail.thumbnailData(
+              video: _file!.path,
+              imageFormat: ImageFormat.JPEG,
+              quality: highQuality ? 100 : 20,
+            ))!
+          : await getData();
+    } else {
+      thumbnail = Uint8List.fromList(
+          await _medium!.getThumbnail(highQuality: highQuality));
     }
-    return thumbnail;
+    return thumbnail!;
   }
 
   Future<File> getFile() async {
-    if (file == null) {
-      file = await medium.getFile();
-      return file!;
+    if (_medium != null) {
+      return await _medium!.getFile();
     } else {
-      return file!;
+      return _file!;
     }
   }
 
   Future<Uint8List> getData() async {
-    if (file == null) {
-      await getFile();
-    }
-    data ??= await file!.readAsBytes();
-
-    return data!;
-  }
-
-  void unselect({PhoneGalleryController? controller}) {
-    if (controller != null) {
-      controller.unselectMedia(this);
-    } else {
-      if (GetInstance().isRegistered<PhoneGalleryController>()) {
-        Get.find<PhoneGalleryController>().unselectMedia(this);
-      }
-    }
-  }
-
-  void select({PhoneGalleryController? controller}) {
-    if (controller != null) {
-      controller.selectMedia(this);
-    } else {
-      if (GetInstance().isRegistered<PhoneGalleryController>()) {
-        Get.find<PhoneGalleryController>().selectMedia(this);
-      }
-    }
-  }
-
-  bool? isSelected({PhoneGalleryController? controller}) {
-    if (controller != null) {
-      return controller.isSelectedMedia(this);
-    } else {
-      if (GetInstance().isRegistered<PhoneGalleryController>()) {
-        return Get.find<PhoneGalleryController>().isSelectedMedia(this);
-      } else {
-        return null;
-      }
-    }
+    _file ??= await getFile();
+    return _file!.readAsBytesSync();
   }
 }

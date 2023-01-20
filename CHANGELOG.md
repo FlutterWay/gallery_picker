@@ -100,3 +100,7 @@
 * Package performance has been improved
 * BottomSheetLayout changed into PickerScaffold
 * PermissionDeniedPage added
+
+## 0.3.1
+
+* fixes formatting issues

@@ -483,6 +483,5 @@ Check out our examples!
 - The [get](https://pub.dev/packages/get) package
 - The [video_player](https://pub.dev/packages/video_player) package
 - The [intl](https://pub.dev/packages/intl) package
-- The [bottom_sheet_bar](https://pub.dev/packages/bottom_sheet_bar) package
 - The [platform_info](https://pub.dev/packages/platform_info) package
 - The [permission_handler](https://pub.dev/packages/permission_handler) package

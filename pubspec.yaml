@@ -19,7 +19,6 @@ dependencies:
   video_thumbnail: ^0.5.3
   intl: ^0.18.0
   bottom_sheet_scaffold: ^0.1.1
-  page_transition: ^2.0.9
 dev_dependencies:
   flutter_test:
     sdk: flutter

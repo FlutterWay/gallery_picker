@@ -108,3 +108,7 @@
 ## 0.3.2
 
 * Problems after version 0.3.1 have been resolved
+
+## 0.3.3
+
+* changes made

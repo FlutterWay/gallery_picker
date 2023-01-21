@@ -132,7 +132,7 @@ There is an example at `example/lib/examples/bottom_sheet_example.dart` to see h
 
 Within the Gallery Picker you can design a page that will be redirected after selecting any image(s).
 
-Note: There are two builder called multipleMediaBuilder and heroBuilder. If you designed both of them, multipleMediaBuilder will be shown after picking multiple media files, heroBuilder will be shown after picking a single media. Use given hero tag to view your Hero image. You can see a simple example below.
+Note: There are two builder called multipleMediaBuilder and heroBuilder. If you designed both of them, multipleMediaBuilder will be shown after picking multiple media files, heroBuilder will be shown after picking a single media. If you only designed multipleMediaBuilder, multipleMediaBuilder will be shown after picking any file. Use given hero tag to view your Hero image. You can see a simple example below.
 
 There is an example at `example/lib/examples/pick_medias_with_builder.dart` to see how it could be done.
 

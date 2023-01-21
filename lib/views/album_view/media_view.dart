@@ -27,6 +27,11 @@ class MediaView extends StatelessWidget {
                       MaterialPageRoute<void>(builder: (BuildContext context) {
                     return controller.heroBuilder!(file.id, file, context);
                   }));
+                } else if (controller.multipleMediasBuilder != null) {
+                  Navigator.of(context).push(
+                      MaterialPageRoute<void>(builder: (BuildContext context) {
+                    return controller.multipleMediasBuilder!([file], context);
+                  }));
                 } else {
                   controller.selectedFiles.add(file);
                   controller.onSelect(controller.selectedFiles);
@@ -54,6 +59,11 @@ class MediaView extends StatelessWidget {
                   Navigator.of(context).push(
                       MaterialPageRoute<void>(builder: (BuildContext context) {
                     return controller.heroBuilder!(file.id, file, context);
+                  }));
+                } else if (controller.multipleMediasBuilder != null) {
+                  Navigator.of(context).push(
+                      MaterialPageRoute<void>(builder: (BuildContext context) {
+                    return controller.multipleMediasBuilder!([file], context);
                   }));
                 } else {
                   controller.selectedFiles.add(file);

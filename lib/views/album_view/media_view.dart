@@ -28,17 +28,18 @@ class MediaView extends StatelessWidget {
                       MaterialPageRoute<void>(builder: (BuildContext context) {
                     return controller.heroBuilder!(file.id, file, context);
                   }));
-                  controller.update();
+                  controller.switchPickerMode(true);
                 } else if (controller.multipleMediasBuilder != null) {
                   await Navigator.of(context).push(
                       MaterialPageRoute<void>(builder: (BuildContext context) {
                     return controller.multipleMediasBuilder!([file], context);
                   }));
-                  controller.update();
+                  controller.switchPickerMode(true);
                 } else {
                   controller.onSelect(controller.selectedFiles);
                   if (isBottomSheet) {
                     BottomSheetPanel.close();
+                    controller.switchPickerMode(true);
                     controller.updatePickerListener();
                   } else {
                     Navigator.pop(context);
@@ -64,17 +65,18 @@ class MediaView extends StatelessWidget {
                       MaterialPageRoute<void>(builder: (BuildContext context) {
                     return controller.heroBuilder!(file.id, file, context);
                   }));
-                  controller.update();
+                  controller.switchPickerMode(true);
                 } else if (controller.multipleMediasBuilder != null) {
                   await Navigator.of(context).push(
                       MaterialPageRoute<void>(builder: (BuildContext context) {
                     return controller.multipleMediasBuilder!([file], context);
                   }));
-                  controller.update();
+                  controller.switchPickerMode(true);
                 } else {
                   controller.onSelect(controller.selectedFiles);
                   if (isBottomSheet) {
                     BottomSheetPanel.close();
+                    controller.switchPickerMode(true);
                     controller.updatePickerListener();
                   } else {
                     Navigator.pop(context);

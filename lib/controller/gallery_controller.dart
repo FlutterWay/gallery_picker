@@ -47,7 +47,7 @@ class PhoneGalleryController extends GetxController {
 
   late bool startWithRecent;
   late bool isRecent;
-  bool permissionGranted = false;
+  bool? permissionGranted;
   bool configurationCompleted = false;
   late Function(List<MediaFile> selectedMedias) onSelect;
   Widget Function(String tag, MediaFile media, BuildContext context)?
@@ -70,12 +70,13 @@ class PhoneGalleryController extends GetxController {
   GalleryAlbum? selectedAlbum;
 
   void resetBottomSheetView() {
-    if (permissionGranted) {
+    if (permissionGranted == true) {
       isRecent = true;
       if (selectedAlbum == null) {
         pickerPageController.jumpToPage(0);
       } else {
         pageController.jumpToPage(0);
+        pickerPageController = PageController();
       }
       selectedAlbum = null;
       update();
@@ -112,6 +113,7 @@ class PhoneGalleryController extends GetxController {
       required bool isBottomSheet}) async {
     _selectedFiles.clear();
     selectedAlbum = album;
+    update();
     updatePickerListener();
     await pageController.animateToPage(1,
         duration: const Duration(milliseconds: 500), curve: Curves.easeIn);
@@ -121,9 +123,11 @@ class PhoneGalleryController extends GetxController {
     _selectedFiles.clear();
     _pickerMode = false;
     pickerPageController = PageController(initialPage: 1);
+    update();
     await pageController.animateToPage(0,
         duration: const Duration(milliseconds: 500), curve: Curves.easeIn);
     selectedAlbum = null;
+    update();
   }
 
   void unselectMedia(MediaFile file) {

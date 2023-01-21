@@ -89,122 +89,133 @@ class _GalleryPickerState extends State<GalleryPickerView> {
     double width = MediaQuery.of(context).size.width;
     return GetBuilder<PhoneGalleryController>(builder: (controller) {
       return GetInstance().isRegistered<PhoneGalleryController>()
-          ? controller.permissionGranted
+          ? controller.permissionGranted != false
               ? PageView(
                   controller: controller.pageController,
                   physics: const NeverScrollableScrollPhysics(),
                   children: [
-                    Scaffold(
-                      backgroundColor: config.backgroundColor,
-                      appBar: PickerAppBar(
-                        controller: controller,
-                        isBottomSheet: widget.isBottomSheet,
-                      ),
-                      body: Column(
-                        children: [
-                          Container(
-                            width: width,
-                            height: 48,
-                            color: config.appbarColor,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                Container(
-                                  decoration: controller.isRecent
-                                      ? BoxDecoration(
-                                          border: Border(
-                                          bottom: BorderSide(
-                                            color: config.underlineColor,
-                                            width: 3.0,
-                                          ),
-                                        ))
-                                      : null,
-                                  height: 48,
-                                  width: width / 2,
-                                  child: TextButton(
-                                      onPressed: () {
-                                        controller.pickerPageController
-                                            .animateToPage(0,
-                                                duration: const Duration(
-                                                    milliseconds: 50),
-                                                curve: Curves.easeIn);
-                                        setState(() {
-                                          controller.isRecent = true;
-                                          controller.switchPickerMode(false);
-                                        });
-                                      },
-                                      child: Text(config.recents,
-                                          style: controller.isRecent
-                                              ? config.selectedMenuStyle
-                                              : config.unselectedMenuStyle)),
+                    WillPopScope(
+                        child: Scaffold(
+                          backgroundColor: config.backgroundColor,
+                          appBar: PickerAppBar(
+                            controller: controller,
+                            isBottomSheet: widget.isBottomSheet,
+                          ),
+                          body: Column(
+                            children: [
+                              Container(
+                                width: width,
+                                height: 48,
+                                color: config.appbarColor,
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: [
+                                    Container(
+                                      decoration: controller.isRecent
+                                          ? BoxDecoration(
+                                              border: Border(
+                                              bottom: BorderSide(
+                                                color: config.underlineColor,
+                                                width: 3.0,
+                                              ),
+                                            ))
+                                          : null,
+                                      height: 48,
+                                      width: width / 2,
+                                      child: TextButton(
+                                          onPressed: () {
+                                            controller.pickerPageController
+                                                .animateToPage(0,
+                                                    duration: const Duration(
+                                                        milliseconds: 50),
+                                                    curve: Curves.easeIn);
+                                            setState(() {
+                                              controller.isRecent = true;
+                                              controller
+                                                  .switchPickerMode(false);
+                                            });
+                                          },
+                                          child: Text(config.recents,
+                                              style: controller.isRecent
+                                                  ? config.selectedMenuStyle
+                                                  : config
+                                                      .unselectedMenuStyle)),
+                                    ),
+                                    Container(
+                                      decoration: !controller.isRecent
+                                          ? BoxDecoration(
+                                              border: Border(
+                                              bottom: BorderSide(
+                                                color: config.underlineColor,
+                                                width: 3.0,
+                                              ),
+                                            ))
+                                          : null,
+                                      height: 48,
+                                      width: width / 2,
+                                      child: TextButton(
+                                          onPressed: () {
+                                            controller.pickerPageController
+                                                .animateToPage(1,
+                                                    duration: const Duration(
+                                                        milliseconds: 50),
+                                                    curve: Curves.easeIn);
+                                            controller.isRecent = false;
+                                            controller.switchPickerMode(false);
+                                          },
+                                          child: Text(
+                                            config.gallery,
+                                            style: controller.isRecent
+                                                ? config.unselectedMenuStyle
+                                                : config.selectedMenuStyle,
+                                          )),
+                                    )
+                                  ],
                                 ),
-                                Container(
-                                  decoration: !controller.isRecent
-                                      ? BoxDecoration(
-                                          border: Border(
-                                          bottom: BorderSide(
-                                            color: config.underlineColor,
-                                            width: 3.0,
-                                          ),
-                                        ))
-                                      : null,
-                                  height: 48,
-                                  width: width / 2,
-                                  child: TextButton(
-                                      onPressed: () {
-                                        controller.pickerPageController
-                                            .animateToPage(1,
-                                                duration: const Duration(
-                                                    milliseconds: 50),
-                                                curve: Curves.easeIn);
+                              ),
+                              Expanded(
+                                child: PageView(
+                                    controller: controller.pickerPageController,
+                                    onPageChanged: (value) {
+                                      if (value == 0) {
+                                        controller.isRecent = true;
+                                        controller.switchPickerMode(false);
+                                      } else {
                                         controller.isRecent = false;
                                         controller.switchPickerMode(false);
-                                      },
-                                      child: Text(
-                                        config.gallery,
-                                        style: controller.isRecent
-                                            ? config.unselectedMenuStyle
-                                            : config.selectedMenuStyle,
-                                      )),
-                                )
-                              ],
-                            ),
+                                      }
+                                    },
+                                    scrollDirection: Axis.horizontal,
+                                    children: [
+                                      controller.isInitialized &&
+                                              controller.recent != null
+                                          ? AlbumMediasView(
+                                              galleryAlbum: controller.recent!,
+                                              controller: controller,
+                                              isBottomSheet:
+                                                  widget.isBottomSheet,
+                                              singleMedia: widget.singleMedia)
+                                          : const Center(
+                                              child: CircularProgressIndicator(
+                                              color: Colors.grey,
+                                            )),
+                                      AlbumCategoriesView(
+                                        controller: controller,
+                                        isBottomSheet: widget.isBottomSheet,
+                                        singleMedia: widget.singleMedia,
+                                      )
+                                    ]),
+                              ),
+                            ],
                           ),
-                          Expanded(
-                            child: PageView(
-                                controller: controller.pickerPageController,
-                                onPageChanged: (value) {
-                                  if (value == 0) {
-                                    controller.isRecent = true;
-                                    controller.switchPickerMode(false);
-                                  } else {
-                                    controller.isRecent = false;
-                                    controller.switchPickerMode(false);
-                                  }
-                                },
-                                scrollDirection: Axis.horizontal,
-                                children: [
-                                  controller.isInitialized &&
-                                          controller.recent != null
-                                      ? AlbumMediasView(
-                                          galleryAlbum: controller.recent!,
-                                          controller: controller,
-                                          isBottomSheet: widget.isBottomSheet,
-                                          singleMedia: widget.singleMedia)
-                                      : const Center(
-                                          child: CircularProgressIndicator(
-                                          color: Colors.grey,
-                                        )),
-                                  AlbumCategoriesView(
-                                    controller: controller,
-                                    isBottomSheet: widget.isBottomSheet,
-                                    singleMedia: widget.singleMedia,
-                                  )
-                                ]),
-                          ),
-                        ],
-                      ),
-                    ),
+                        ),
+                        onWillPop: () async {
+                          if (!widget.isBottomSheet) {
+                            controller.disposeController();
+                          }
+                          return true;
+                        }),
                     AlbumPage(
                         album: controller.selectedAlbum,
                         controller: controller,
@@ -212,10 +223,12 @@ class _GalleryPickerState extends State<GalleryPickerView> {
                         isBottomSheet: widget.isBottomSheet)
                   ],
                 )
-              : controller.config.permissionDeniedPage ??
-                  PermissionDeniedView(
-                    config: controller.config,
-                  )
+              : Material(
+                  child: controller.config.permissionDeniedPage ??
+                      PermissionDeniedView(
+                        config: controller.config,
+                      ),
+                )
           : ReloadGallery(
               config,
               onpressed: () async {

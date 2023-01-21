@@ -173,7 +173,6 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<void> pickMedia() async {
     List<MediaFile>? media = await GalleryPicker.pickMedia(
         context: context,
-        config: Config(lastWeek: "Bu hafta"),
         initSelectedMedia: selectedMedias,
         extraRecentMedia: selectedMedias,
         startWithRecent: true);

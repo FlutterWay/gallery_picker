@@ -104,3 +104,7 @@
 ## 0.3.1
 
 * fixes formatting issues
+
+## 0.3.2
+
+* Problems after version 0.3.1 have been resolved

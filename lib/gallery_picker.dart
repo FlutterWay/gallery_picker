@@ -6,6 +6,7 @@ export 'models/mode.dart';
 export 'models/medium.dart';
 export 'models/gallery_media.dart';
 export 'models/gallery_album.dart';
+export 'package:page_transition/src/enum.dart';
 export 'user_widgets/thumbnail_media.dart';
 export 'user_widgets/album_categories_view.dart';
 export 'user_widgets/album_media_view.dart';
@@ -21,6 +22,7 @@ import 'package:bottom_sheet_scaffold/bottom_sheet_scaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:gallery_picker/models/gallery_media.dart';
 import 'package:get/get.dart';
+import 'package:page_transition/page_transition.dart';
 import '../../controller/gallery_controller.dart';
 import 'controller/picker_listener.dart';
 import 'models/config.dart';
@@ -49,24 +51,25 @@ class GalleryPicker {
       {Config? config,
       bool startWithRecent = false,
       bool singleMedia = false,
+      PageTransitionType pageTransitionType = PageTransitionType.rightToLeft,
       List<MediaFile>? initSelectedMedia,
       List<MediaFile>? extraRecentMedia,
       required BuildContext context}) async {
     List<MediaFile>? media;
     await Navigator.push(
-      context,
-      MaterialPageRoute(
-          builder: (context) => GalleryPickerView(
-                onSelect: (mediaTmp) {
-                  media = mediaTmp;
-                },
-                config: config,
-                singleMedia: singleMedia,
-                initSelectedMedia: initSelectedMedia,
-                extraRecentMedia: extraRecentMedia,
-                startWithRecent: startWithRecent,
-              )),
-    );
+        context,
+        PageTransition(
+            type: pageTransitionType,
+            child: GalleryPickerView(
+              onSelect: (mediaTmp) {
+                media = mediaTmp;
+              },
+              config: config,
+              singleMedia: singleMedia,
+              initSelectedMedia: initSelectedMedia,
+              extraRecentMedia: extraRecentMedia,
+              startWithRecent: startWithRecent,
+            )));
     return media;
   }
 
@@ -77,24 +80,25 @@ class GalleryPicker {
       Widget Function(String tag, MediaFile media, BuildContext context)?
           heroBuilder,
       bool singleMedia = false,
+      PageTransitionType pageTransitionType = PageTransitionType.rightToLeft,
       List<MediaFile>? initSelectedMedia,
       List<MediaFile>? extraRecentMedia,
       bool startWithRecent = false,
       required BuildContext context}) async {
     await Navigator.push(
-      context,
-      MaterialPageRoute(
-          builder: (context) => GalleryPickerView(
-                onSelect: (media) {},
-                multipleMediaBuilder: multipleMediaBuilder,
-                heroBuilder: heroBuilder,
-                singleMedia: singleMedia,
-                config: config,
-                initSelectedMedia: initSelectedMedia,
-                extraRecentMedia: extraRecentMedia,
-                startWithRecent: startWithRecent,
-              )),
-    );
+        context,
+        PageTransition(
+            type: pageTransitionType,
+            child: GalleryPickerView(
+              onSelect: (media) {},
+              multipleMediaBuilder: multipleMediaBuilder,
+              heroBuilder: heroBuilder,
+              singleMedia: singleMedia,
+              config: config,
+              initSelectedMedia: initSelectedMedia,
+              extraRecentMedia: extraRecentMedia,
+              startWithRecent: startWithRecent,
+            )));
   }
 
   static Future<void> openSheet() async {
@@ -103,9 +107,6 @@ class GalleryPicker {
 
   static Future<void> closeSheet() async {
     BottomSheetPanel.close();
-    if (GetInstance().isRegistered<PhoneGalleryController>()) {
-      Get.find<PhoneGalleryController>().resetBottomSheetView();
-    }
   }
 
   static bool get isSheetOpened {

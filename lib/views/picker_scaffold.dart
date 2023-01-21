@@ -109,6 +109,19 @@ class PickerScaffold extends StatelessWidget {
       backgroundColor: backgroundColor,
       bottomNavigationBar: bottomNavigationBar,
       body: body,
+      onWillPop: () async {
+        if (BottomSheetPanel.isOpen) {
+          if (GetInstance().isRegistered<PhoneGalleryController>() &&
+              Get.find<PhoneGalleryController>().selectedAlbum != null) {
+            Get.find<PhoneGalleryController>().backToPicker();
+          } else {
+            BottomSheetPanel.close();
+          }
+          return false;
+        } else {
+          return true;
+        }
+      },
       bottomSheet: DraggableBottomSheet(
         draggableBody: true,
         maxHeight: MediaQuery.of(context).size.height,

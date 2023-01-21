@@ -224,6 +224,7 @@ A Config class is provided to user to customize your gallery picker. You can cus
 ```dart
 List<MediaFile>? media = await GalleryPicker.pickMedia(
   context: context,
+  pageTransitionType: PageTransitionType.rightToLeft
   config: Config(
     backgroundColor: Colors.white,
     permissionDeniedPage:PermissionDeniedPage(),

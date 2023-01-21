@@ -17,6 +17,8 @@ export 'user_widgets/photo_provider.dart';
 export 'user_widgets/video_provider.dart';
 export 'user_widgets/media_provider.dart';
 export 'views/picker_scaffold.dart';
+export 'package:bottom_sheet_scaffold/models/sheet_status.dart';
+export 'package:bottom_sheet_scaffold/views/bottom_sheet_builder.dart';
 export 'views/gallery_picker_view/gallery_picker_view.dart';
 import 'package:bottom_sheet_scaffold/bottom_sheet_scaffold.dart';
 import 'package:flutter/material.dart';

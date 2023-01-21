@@ -140,3 +140,7 @@
 ## 0.4.0
 
 * changes made
+
+## 0.4.1
+
+* BottomSheetBuilder added

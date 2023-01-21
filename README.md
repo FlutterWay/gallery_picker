@@ -395,6 +395,30 @@ GalleryPickerBuilder(
   },
 )
 ```
+
+## BottomSheetBuilder
+Use BottomSheetBuilder if you need to listen bottom sheet status to change something in your page.
+
+```dart
+BottomSheetBuilder(
+  builder: (status, context) {
+    return FloatingActionButton(
+      onPressed: () {
+        if (status.isExpanded) {
+          GalleryPicker.closeSheet();
+        } else {
+          GalleryPicker.openSheet();
+        }
+      },
+      child: Icon(!status.isExpanded
+          ? Icons.open_in_browser
+          : Icons.close_fullscreen),
+    );
+  },
+)
+```
+
+
 ### AlbumMediaView
 
 View all media files in the album sorted by its creation date

@@ -89,7 +89,9 @@ class PhoneGalleryController extends GetxController {
 
   void updateSelectedFiles(List<MediaFile> media) {
     _selectedFiles = media.map((e) => e).toList();
-    if (selectedFiles.isNotEmpty) {
+    if (selectedFiles.isEmpty) {
+      _pickerMode = false;
+    } else {
       _pickerMode = true;
     }
     update();

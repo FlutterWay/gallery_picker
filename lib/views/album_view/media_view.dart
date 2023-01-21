@@ -22,6 +22,8 @@ class MediaView extends StatelessWidget {
         ThumbnailMediaFile(
             onLongPress: () {
               if (singleMedia) {
+                controller.selectedFiles.add(file);
+                controller.updatePickerListener();
                 if (controller.heroBuilder != null) {
                   Navigator.of(context).push(
                       MaterialPageRoute<void>(builder: (BuildContext context) {
@@ -33,9 +35,7 @@ class MediaView extends StatelessWidget {
                     return controller.multipleMediasBuilder!([file], context);
                   }));
                 } else {
-                  controller.selectedFiles.add(file);
                   controller.onSelect(controller.selectedFiles);
-                  controller.updatePickerListener();
                   if (isBottomSheet) {
                     BottomSheetPanel.close();
                   } else {
@@ -55,6 +55,8 @@ class MediaView extends StatelessWidget {
                   controller.selectMedia(file);
                 }
               } else {
+                controller.selectedFiles.add(file);
+                controller.updatePickerListener();
                 if (controller.heroBuilder != null) {
                   Navigator.of(context).push(
                       MaterialPageRoute<void>(builder: (BuildContext context) {
@@ -66,9 +68,7 @@ class MediaView extends StatelessWidget {
                     return controller.multipleMediasBuilder!([file], context);
                   }));
                 } else {
-                  controller.selectedFiles.add(file);
                   controller.onSelect(controller.selectedFiles);
-                  controller.updatePickerListener();
                   if (isBottomSheet) {
                     BottomSheetPanel.close();
                   } else {

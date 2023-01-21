@@ -20,16 +20,16 @@ class MediaView extends StatelessWidget {
       fit: StackFit.expand,
       children: [
         ThumbnailMediaFile(
-            onLongPress: () {
+            onLongPress: () async {
               if (singleMedia) {
                 controller.selectedFiles.add(file);
                 if (controller.heroBuilder != null) {
-                  Navigator.of(context).push(
+                  await Navigator.of(context).push(
                       MaterialPageRoute<void>(builder: (BuildContext context) {
                     return controller.heroBuilder!(file.id, file, context);
                   }));
                 } else if (controller.multipleMediasBuilder != null) {
-                  Navigator.of(context).push(
+                  await Navigator.of(context).push(
                       MaterialPageRoute<void>(builder: (BuildContext context) {
                     return controller.multipleMediasBuilder!([file], context);
                   }));
@@ -47,7 +47,7 @@ class MediaView extends StatelessWidget {
                 controller.selectMedia(file);
               }
             },
-            onTap: () {
+            onTap: () async {
               if (controller.pickerMode) {
                 if (controller.isSelectedMedia(file)) {
                   controller.unselectMedia(file);
@@ -57,12 +57,12 @@ class MediaView extends StatelessWidget {
               } else {
                 controller.selectedFiles.add(file);
                 if (controller.heroBuilder != null) {
-                  Navigator.of(context).push(
+                  await Navigator.of(context).push(
                       MaterialPageRoute<void>(builder: (BuildContext context) {
                     return controller.heroBuilder!(file.id, file, context);
                   }));
                 } else if (controller.multipleMediasBuilder != null) {
-                  Navigator.of(context).push(
+                  await Navigator.of(context).push(
                       MaterialPageRoute<void>(builder: (BuildContext context) {
                     return controller.multipleMediasBuilder!([file], context);
                   }));

@@ -37,12 +37,13 @@ class MediaView extends StatelessWidget {
                   controller.onSelect(controller.selectedFiles);
                   if (isBottomSheet) {
                     BottomSheetPanel.close();
+                    controller.updatePickerListener();
                   } else {
                     Navigator.pop(context);
+                    controller.updatePickerListener();
                     controller.disposeController();
                   }
                 }
-                controller.updatePickerListener();
               } else {
                 controller.selectMedia(file);
               }
@@ -70,12 +71,13 @@ class MediaView extends StatelessWidget {
                   controller.onSelect(controller.selectedFiles);
                   if (isBottomSheet) {
                     BottomSheetPanel.close();
+                    controller.updatePickerListener();
                   } else {
                     Navigator.pop(context);
+                    controller.updatePickerListener();
                     controller.disposeController();
                   }
                 }
-                controller.updatePickerListener();
               }
             },
             file: file,

@@ -23,7 +23,6 @@ class MediaView extends StatelessWidget {
             onLongPress: () {
               if (singleMedia) {
                 controller.selectedFiles.add(file);
-                controller.updatePickerListener();
                 if (controller.heroBuilder != null) {
                   Navigator.of(context).push(
                       MaterialPageRoute<void>(builder: (BuildContext context) {
@@ -43,6 +42,7 @@ class MediaView extends StatelessWidget {
                     controller.disposeController();
                   }
                 }
+                controller.updatePickerListener();
               } else {
                 controller.selectMedia(file);
               }
@@ -56,7 +56,6 @@ class MediaView extends StatelessWidget {
                 }
               } else {
                 controller.selectedFiles.add(file);
-                controller.updatePickerListener();
                 if (controller.heroBuilder != null) {
                   Navigator.of(context).push(
                       MaterialPageRoute<void>(builder: (BuildContext context) {
@@ -76,6 +75,7 @@ class MediaView extends StatelessWidget {
                     controller.disposeController();
                   }
                 }
+                controller.updatePickerListener();
               }
             },
             file: file,

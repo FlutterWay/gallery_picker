@@ -28,11 +28,13 @@ class MediaView extends StatelessWidget {
                       MaterialPageRoute<void>(builder: (BuildContext context) {
                     return controller.heroBuilder!(file.id, file, context);
                   }));
+                  controller.update();
                 } else if (controller.multipleMediasBuilder != null) {
                   await Navigator.of(context).push(
                       MaterialPageRoute<void>(builder: (BuildContext context) {
                     return controller.multipleMediasBuilder!([file], context);
                   }));
+                  controller.update();
                 } else {
                   controller.onSelect(controller.selectedFiles);
                   if (isBottomSheet) {
@@ -62,11 +64,13 @@ class MediaView extends StatelessWidget {
                       MaterialPageRoute<void>(builder: (BuildContext context) {
                     return controller.heroBuilder!(file.id, file, context);
                   }));
+                  controller.update();
                 } else if (controller.multipleMediasBuilder != null) {
                   await Navigator.of(context).push(
                       MaterialPageRoute<void>(builder: (BuildContext context) {
                     return controller.multipleMediasBuilder!([file], context);
                   }));
+                  controller.update();
                 } else {
                   controller.onSelect(controller.selectedFiles);
                   if (isBottomSheet) {

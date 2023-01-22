@@ -144,3 +144,7 @@
 ## 0.4.1
 
 * BottomSheetBuilder added
+
+## 0.4.2
+
+* added parameter named bottomSheetMinHeight 

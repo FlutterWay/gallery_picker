@@ -22,6 +22,7 @@ class PickerScaffold extends StatelessWidget {
     this.onEndDrawerChanged,
     this.bottomNavigationBar,
     this.backgroundColor,
+    this.bottomSheetMinHeight = 0,
     this.resizeToAvoidBottomInset,
     this.primary = true,
     this.drawerDragStartBehavior = DragStartBehavior.start,
@@ -50,7 +51,7 @@ class PickerScaffold extends StatelessWidget {
       }
     }
   }
-
+  final double bottomSheetMinHeight;
   final Widget? body;
   final bool extendBody;
   final bool extendBodyBehindAppBar;
@@ -124,6 +125,7 @@ class PickerScaffold extends StatelessWidget {
       },
       bottomSheet: DraggableBottomSheet(
         draggableBody: true,
+        minHeight: bottomSheetMinHeight,
         maxHeight: MediaQuery.of(context).size.height,
         onHide: () {
           if (GetInstance().isRegistered<PhoneGalleryController>()) {

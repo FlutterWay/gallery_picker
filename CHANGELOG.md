@@ -148,3 +148,7 @@
 ## 0.4.2
 
 * added parameter named bottomSheetMinHeight 
+
+## 0.4.3
+
+* Version of BottomSheetScaffold upgraded to 0.1.5

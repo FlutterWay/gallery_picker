@@ -39,6 +39,7 @@ class PickerScaffold extends StatelessWidget {
     this.extraRecentMedia,
     this.singleMedia = false,
     this.multipleMediaBuilder,
+    this.onWillPop,
   }) {
     if (GetInstance().isRegistered<PhoneGalleryController>()) {
       if (initSelectedMedia != null) {
@@ -79,6 +80,7 @@ class PickerScaffold extends StatelessWidget {
   final List<MediaFile>? initSelectedMedia;
   final List<MediaFile>? extraRecentMedia;
   final bool singleMedia;
+  final Future<bool> Function()? onWillPop;
   final Function(List<MediaFile> selectedMedia) onSelect;
   final Widget Function(String tag, MediaFile media, BuildContext context)?
       heroBuilder;
@@ -121,7 +123,11 @@ class PickerScaffold extends StatelessWidget {
           }
           return false;
         } else {
-          return true;
+          if (onWillPop != null) {
+            return await onWillPop!();
+          } else {
+            return true;
+          }
         }
       },
       bottomSheet: DraggableBottomSheet(

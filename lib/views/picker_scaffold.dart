@@ -109,6 +109,7 @@ class PickerScaffold extends StatelessWidget {
       primary: primary,
       backgroundColor: backgroundColor,
       bottomNavigationBar: bottomNavigationBar,
+      oneFingerScrolling: true,
       body: body,
       onWillPop: () async {
         if (BottomSheetPanel.isOpen) {

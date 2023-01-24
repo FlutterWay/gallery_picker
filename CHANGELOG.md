@@ -152,3 +152,7 @@
 ## 0.4.3
 
 * Version of BottomSheetScaffold upgraded to 0.1.5
+
+## 0.4.4
+
+* Version of BottomSheetScaffold upgraded to 0.1.6

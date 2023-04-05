@@ -160,3 +160,7 @@
 ## 0.4.5
 
 * Added parameter named onWillPop 
+
+## 0.4.6
+
+* The version of 'intl' package has downgraded to ^0.17.0 to prevent version solving issues with firebase

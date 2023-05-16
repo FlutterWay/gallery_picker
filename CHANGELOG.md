@@ -168,3 +168,8 @@
 ## 0.4.7
 
 * Dart 3 & Flutter 3.10 compatibility
+  
+## 0.4.8
+
+* Dart 3 & Flutter 3.10 compatibility
+  

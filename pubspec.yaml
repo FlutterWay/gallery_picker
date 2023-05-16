@@ -1,20 +1,20 @@
 name: gallery_picker
 description: Gallery Picker is a flutter package that will allow you to pick media file(s), manage and navigate inside your gallery with modern tools and views.
-version: 0.4.6
+version: 0.4.7
 homepage: https://github.com/FlutterWay/gallery_picker
 
 environment:
-  sdk: '>=2.18.5 <3.0.0'
+  sdk: '>=2.19.6 <4.0.0'
   flutter: ">=1.17.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  cupertino_icons: ^1.0.2
-  photo_gallery: ^1.1.1
+  cupertino_icons: ^1.0.5
+  photo_gallery: ^1.2.2
   permission_handler: ^10.2.0
-  transparent_image: ^2.0.0
-  video_player: ^2.4.10
+  transparent_image: ^2.0.1
+  video_player: ^2.6.1
   get: ^4.6.5
   video_thumbnail: ^0.5.3
   intl: ^0.17.0

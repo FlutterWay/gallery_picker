@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gallery_picker/models/gallery_album.dart';
 import '../../controller/gallery_controller.dart';
 
-class AlbumAppBar extends StatelessWidget with PreferredSizeWidget {
+class AlbumAppBar extends StatelessWidget implements PreferredSizeWidget {
   final PhoneGalleryController controller;
   final GalleryAlbum album;
   final bool isBottomSheet;

@@ -164,3 +164,7 @@
 ## 0.4.6
 
 * The version of 'intl' package has downgraded to ^0.17.0 to prevent version solving issues with firebase
+  
+## 0.4.7
+
+* Dart 3 & Flutter 3.10 compatibility

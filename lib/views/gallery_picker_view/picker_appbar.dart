@@ -2,7 +2,7 @@ import 'package:bottom_sheet_scaffold/bottom_sheet_scaffold.dart';
 import 'package:flutter/material.dart';
 import '../../controller/gallery_controller.dart';
 
-class PickerAppBar extends StatelessWidget with PreferredSizeWidget {
+class PickerAppBar extends StatelessWidget implements PreferredSizeWidget {
   final PhoneGalleryController controller;
   final bool isBottomSheet;
   const PickerAppBar(

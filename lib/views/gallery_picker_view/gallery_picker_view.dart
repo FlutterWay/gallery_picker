@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 import '../../controller/gallery_controller.dart';
 import '../../models/config.dart';
 import '../../models/gallery_album.dart';
 import '../../models/media_file.dart';
 import '../album_categories_view/album_categories_view.dart';
-import '../album_view/album_page.dart';
 import '../album_view/album_medias_view.dart';
+import '../album_view/album_page.dart';
 import 'permission_denied_view.dart';
 import 'picker_appbar.dart';
 import 'reload_gallery.dart';

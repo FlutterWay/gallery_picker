@@ -64,9 +64,16 @@ You could find the code samples of the given gifs below in `/example/lib/example
 
 #### Android
 Add uses-permission `android/app/src/main/AndroidManifest.xml` file
+
  ```xml
      <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
  ```
+ for android sdk 33 and above
+ ```xml
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO"/>
+ ```
+
 #### Ios
 Add these configurations to your `ios/Runner/info.plist` file 
  ```xml

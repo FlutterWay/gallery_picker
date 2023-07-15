@@ -1,15 +1,18 @@
 import 'dart:async';
 import 'dart:io';
+
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:photo_gallery/photo_gallery.dart';
-import '../models/config.dart';
-import '../models/gallery_media.dart';
+
 import '/models/gallery_album.dart';
 import '/models/medium.dart';
+import '../models/config.dart';
+import '../models/gallery_media.dart';
 import '../models/media_file.dart';
 import 'picker_listener.dart';
 
@@ -168,28 +171,39 @@ class PhoneGalleryController extends GetxController {
   }
 
   static Future<bool> promptPermissionSetting() async {
-    await PhoneGalleryController.requestStatus(Permission.storage);
-    if (Platform.isIOS) {
-      await PhoneGalleryController.requestStatus(Permission.photos);
+    if (Platform.isAndroid) {
+      final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
+      final AndroidDeviceInfo info = await deviceInfoPlugin.androidInfo;
+      if (info.version.sdkInt >= 33) {
+        if (await PhoneGalleryController.requestPermission(Permission.photos)) {
+          return await PhoneGalleryController.requestPermission(
+              Permission.videos);
+        } else {
+          return false;
+        }
+      } else {
+        return await PhoneGalleryController.requestPermission(
+            Permission.storage);
+      }
     }
-    if (Platform.isIOS &&
-            await Permission.storage.isGranted &&
-            await Permission.photos.isGranted ||
-        Platform.isAndroid && await Permission.storage.isGranted) {
-      return true;
+    bool statusStorage =
+        await PhoneGalleryController.requestPermission(Permission.storage);
+    if (statusStorage) {
+      return await PhoneGalleryController.requestPermission(Permission.photos);
     }
     return false;
   }
 
-  static Future<void> requestStatus(Permission permission) async {
-    while (true) {
-      try {
-        await permission.request();
-        break;
-      } catch (e) {
-        await Future.delayed(const Duration(milliseconds: 500), () {});
+  static Future<bool> requestPermission(Permission permission) async {
+    if (await permission.isGranted) {
+      return true;
+    } else {
+      var result = await permission.request();
+      if (result == PermissionStatus.granted) {
+        return true;
       }
     }
+    return false;
   }
 
   Future<void> initializeAlbums() async {
@@ -213,11 +227,29 @@ class PhoneGalleryController extends GetxController {
 
   void permissionListener() {
     Timer.periodic(const Duration(seconds: 1), (timer) async {
-      if (await Permission.storage.isGranted) {
+      if (await isGranted()) {
         initializeAlbums();
         timer.cancel();
       }
     });
+  }
+
+  Future<bool> isGranted() async {
+    if (Platform.isAndroid) {
+      final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
+      final AndroidDeviceInfo info = await deviceInfoPlugin.androidInfo;
+      if (info.version.sdkInt >= 33) {
+        if (await Permission.photos.isGranted) {
+          return await Permission.videos.isGranted;
+        } else {
+          return false;
+        }
+      } else {
+        return await Permission.storage.isGranted;
+      }
+    }
+    return (await Permission.storage.isGranted) &&
+        (await Permission.photos.isGranted);
   }
 
   static Future<GalleryMedia?> get collectGallery async {
@@ -228,14 +260,13 @@ class PhoneGalleryController extends GetxController {
           await PhotoGallery.listAlbums(mediumType: MediumType.image);
       List<Album> videoAlbums =
           await PhotoGallery.listAlbums(mediumType: MediumType.video);
-
       for (var photoAlbum in photoAlbums) {
         GalleryAlbum entireGalleryAlbum = GalleryAlbum.album(photoAlbum);
         await entireGalleryAlbum.initialize();
         entireGalleryAlbum.setType = AlbumType.image;
-        if (videoAlbums.any((element) => element.name == photoAlbum.name)) {
-          Album videoAlbum = videoAlbums
-              .singleWhere((element) => element.name == photoAlbum.name);
+        if (videoAlbums.any((element) => element.id == photoAlbum.id)) {
+          Album videoAlbum =
+              videoAlbums.singleWhere((element) => element.id == photoAlbum.id);
           GalleryAlbum videoGalleryAlbum = GalleryAlbum.album(videoAlbum);
           await videoGalleryAlbum.initialize();
           DateTime? lastPhotoDate = entireGalleryAlbum.lastDate;

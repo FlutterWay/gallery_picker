@@ -171,10 +171,7 @@
   
 ## 0.4.8
 
-* Dart 3 & Flutter 3.10 compatibility
-  
-## 0.4.9
-
 * Fixed permission issue for android sdk 33 and above. 
-* https://github.com/FlutterWay/gallery_picker/issues/1 is fixed
+* https://github.com/FlutterWay/gallery_picker/issues/1 is fix
+  
   

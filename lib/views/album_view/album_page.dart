@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gallery_picker/views/album_view/album_appbar.dart';
+
 import '../../../controller/gallery_controller.dart';
 import '../../../models/gallery_album.dart';
 import 'album_medias_view.dart';
@@ -17,7 +18,11 @@ class AlbumPage extends StatelessWidget {
       required this.isBottomSheet});
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
+    return PopScope(
+        canPop: false,
+        onPopInvoked: (value) {
+          controller.backToPicker();
+        },
         child: Scaffold(
           backgroundColor: controller.config.backgroundColor,
           appBar: album != null
@@ -39,10 +44,6 @@ class AlbumPage extends StatelessWidget {
                   "No Album Found",
                   style: controller.config.textStyle,
                 )),
-        ),
-        onWillPop: () async {
-          controller.backToPicker();
-          return false;
-        });
+        ));
   }
 }

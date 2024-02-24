@@ -9,11 +9,11 @@ import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:photo_gallery/photo_gallery.dart';
 
-import '/models/gallery_album.dart';
-import '/models/medium.dart';
 import '../models/config.dart';
 import '../models/gallery_media.dart';
 import '../models/media_file.dart';
+import '/models/gallery_album.dart';
+import '/models/medium.dart';
 import 'picker_listener.dart';
 
 class PhoneGalleryController extends GetxController {
@@ -206,8 +206,8 @@ class PhoneGalleryController extends GetxController {
     return false;
   }
 
-  Future<void> initializeAlbums() async {
-    _media = await PhoneGalleryController.collectGallery;
+  Future<void> initializeAlbums({Locale? locale}) async {
+    _media = await PhoneGalleryController.collectGallery(locale: locale);
     if (_media != null) {
       if (_extraRecentMedia != null) {
         GalleryAlbum? recentTmp = recent;
@@ -220,15 +220,15 @@ class PhoneGalleryController extends GetxController {
       _isInitialized = true;
     } else {
       permissionGranted = false;
-      permissionListener();
+      permissionListener(locale: locale);
     }
     update();
   }
 
-  void permissionListener() {
+  void permissionListener({Locale? locale}) {
     Timer.periodic(const Duration(seconds: 1), (timer) async {
       if (await isGranted()) {
-        initializeAlbums();
+        initializeAlbums(locale: locale);
         timer.cancel();
       }
     });
@@ -252,7 +252,7 @@ class PhoneGalleryController extends GetxController {
         (await Permission.photos.isGranted);
   }
 
-  static Future<GalleryMedia?> get collectGallery async {
+  static Future<GalleryMedia?> collectGallery({Locale? locale}) async {
     if (await promptPermissionSetting()) {
       List<GalleryAlbum> tempGalleryAlbums = [];
 
@@ -262,13 +262,13 @@ class PhoneGalleryController extends GetxController {
           await PhotoGallery.listAlbums(mediumType: MediumType.video);
       for (var photoAlbum in photoAlbums) {
         GalleryAlbum entireGalleryAlbum = GalleryAlbum.album(photoAlbum);
-        await entireGalleryAlbum.initialize();
+        await entireGalleryAlbum.initialize(locale: locale);
         entireGalleryAlbum.setType = AlbumType.image;
         if (videoAlbums.any((element) => element.id == photoAlbum.id)) {
           Album videoAlbum =
               videoAlbums.singleWhere((element) => element.id == photoAlbum.id);
           GalleryAlbum videoGalleryAlbum = GalleryAlbum.album(videoAlbum);
-          await videoGalleryAlbum.initialize();
+          await videoGalleryAlbum.initialize(locale: locale);
           DateTime? lastPhotoDate = entireGalleryAlbum.lastDate;
           DateTime? lastVideoDate = videoGalleryAlbum.lastDate;
 
@@ -296,7 +296,7 @@ class PhoneGalleryController extends GetxController {
             }
           }
           for (var file in videoGalleryAlbum.files) {
-            entireGalleryAlbum.addFile(file);
+            entireGalleryAlbum.addFile(file, locale: locale);
           }
           entireGalleryAlbum.sort();
           entireGalleryAlbum.setType = AlbumType.mixed;
@@ -306,7 +306,7 @@ class PhoneGalleryController extends GetxController {
       }
       for (var videoAlbum in videoAlbums) {
         GalleryAlbum galleryVideoAlbum = GalleryAlbum.album(videoAlbum);
-        await galleryVideoAlbum.initialize();
+        await galleryVideoAlbum.initialize(locale: locale);
         galleryVideoAlbum.setType = AlbumType.video;
         tempGalleryAlbums.add(galleryVideoAlbum);
       }

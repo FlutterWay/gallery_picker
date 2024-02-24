@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import '/models/gallery_album.dart';
+
 import '../../../controller/gallery_controller.dart';
+import '/models/gallery_album.dart';
 import 'date_category_view.dart';
 import 'selected_medias_view.dart';
 
@@ -50,16 +51,21 @@ class AlbumMediasView extends StatelessWidget {
       int index = categoriesTmp
           .indexWhere((element) => element.name == controller.config.recent);
       if (index != -1) {
-        DateCategory category = DateCategory(files: [
-          ...controller.extraRecentMedia!,
-          ...categoriesTmp[index].files
-        ], name: categoriesTmp[index].name);
+        DateCategory category = DateCategory(
+            files: [
+              ...controller.extraRecentMedia!,
+              ...categoriesTmp[index].files,
+            ],
+            name: categoriesTmp[index].name,
+            dateTime: categoriesTmp[index].dateTime);
         categoriesTmp[index] = category;
         return categoriesTmp;
       } else {
         return [
           DateCategory(
               files: controller.extraRecentMedia!,
+              dateTime: controller.extraRecentMedia!.first.lastModified ??
+                  DateTime.now(),
               name: controller.config.recent),
           ...categoriesTmp
         ];

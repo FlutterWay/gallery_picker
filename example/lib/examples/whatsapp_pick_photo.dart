@@ -1,8 +1,8 @@
+// ignore: depend_on_referenced_packages
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 // ignore: depend_on_referenced_packages
 import 'package:gallery_picker/gallery_picker.dart';
-// ignore: depend_on_referenced_packages
-import 'package:camera/camera.dart';
 import 'package:gallery_picker_example/examples/multiple_medias.dart';
 
 class WhatsappPickPhoto extends StatefulWidget {
@@ -32,7 +32,7 @@ class _WhatsappPickPhotoState extends State<WhatsappPickPhoto> {
   }
 
   Future<void> fetchMedias() async {
-    gallery = await GalleryPicker.initializeGallery;
+    gallery = await GalleryPicker.initializeGallery();
     setState(() {});
   }
 

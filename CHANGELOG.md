@@ -174,4 +174,12 @@
 * Fixed permission issue for android sdk 33 and above. 
 * https://github.com/FlutterWay/gallery_picker/issues/1 is fix
   
+## 0.5.0
+
+* list named months has been removed from Config model because now it automatically adjusts itself according to the locale value. or you can give the locale yourself
+* Locale parameter added to GalleryPicker's functions
+* kotlin version upgraded
+* version of packages upgraded
+
+  
   

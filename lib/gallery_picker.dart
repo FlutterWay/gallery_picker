@@ -1,35 +1,38 @@
 library gallery_picker;
 
-export 'models/config.dart';
-export 'models/media_file.dart';
-export 'models/mode.dart';
-export 'models/medium.dart';
-export 'models/gallery_media.dart';
-export 'models/gallery_album.dart';
-export 'package:page_transition/src/enum.dart';
-export 'user_widgets/thumbnail_media.dart';
-export 'user_widgets/album_categories_view.dart';
-export 'user_widgets/album_media_view.dart';
-export 'user_widgets/date_category_view.dart';
-export 'user_widgets/thumbnail_album.dart';
-export 'user_widgets/gallery_picker_builder.dart';
-export 'user_widgets/photo_provider.dart';
-export 'user_widgets/video_provider.dart';
-export 'user_widgets/media_provider.dart';
-export 'views/picker_scaffold.dart';
-export 'package:bottom_sheet_scaffold/models/sheet_status.dart';
-export 'package:bottom_sheet_scaffold/views/bottom_sheet_builder.dart';
-export 'views/gallery_picker_view/gallery_picker_view.dart';
 import 'package:bottom_sheet_scaffold/bottom_sheet_scaffold.dart';
 import 'package:flutter/material.dart';
 import 'package:gallery_picker/models/gallery_media.dart';
 import 'package:get/get.dart';
 import 'package:page_transition/page_transition.dart';
+
 import '../../controller/gallery_controller.dart';
 import 'controller/picker_listener.dart';
 import 'models/config.dart';
 import 'models/media_file.dart';
 import 'views/gallery_picker_view/gallery_picker_view.dart';
+
+export 'package:bottom_sheet_scaffold/models/sheet_status.dart';
+export 'package:bottom_sheet_scaffold/views/bottom_sheet_builder.dart';
+export 'package:page_transition/src/enum.dart';
+
+export 'models/config.dart';
+export 'models/gallery_album.dart';
+export 'models/gallery_media.dart';
+export 'models/media_file.dart';
+export 'models/medium.dart';
+export 'models/mode.dart';
+export 'user_widgets/album_categories_view.dart';
+export 'user_widgets/album_media_view.dart';
+export 'user_widgets/date_category_view.dart';
+export 'user_widgets/gallery_picker_builder.dart';
+export 'user_widgets/media_provider.dart';
+export 'user_widgets/photo_provider.dart';
+export 'user_widgets/thumbnail_album.dart';
+export 'user_widgets/thumbnail_media.dart';
+export 'user_widgets/video_provider.dart';
+export 'views/gallery_picker_view/gallery_picker_view.dart';
+export 'views/picker_scaffold.dart';
 
 class GalleryPicker {
   static Stream<List<MediaFile>> get listenSelectedFiles {
@@ -53,6 +56,7 @@ class GalleryPicker {
       {Config? config,
       bool startWithRecent = false,
       bool singleMedia = false,
+      Locale? locale,
       PageTransitionType pageTransitionType = PageTransitionType.rightToLeft,
       List<MediaFile>? initSelectedMedia,
       List<MediaFile>? extraRecentMedia,
@@ -67,6 +71,7 @@ class GalleryPicker {
                 media = mediaTmp;
               },
               config: config,
+              locale: locale,
               singleMedia: singleMedia,
               initSelectedMedia: initSelectedMedia,
               extraRecentMedia: extraRecentMedia,
@@ -81,6 +86,7 @@ class GalleryPicker {
           multipleMediaBuilder,
       Widget Function(String tag, MediaFile media, BuildContext context)?
           heroBuilder,
+      Locale? locale,
       bool singleMedia = false,
       PageTransitionType pageTransitionType = PageTransitionType.rightToLeft,
       List<MediaFile>? initSelectedMedia,
@@ -93,6 +99,7 @@ class GalleryPicker {
             type: pageTransitionType,
             child: GalleryPickerView(
               onSelect: (media) {},
+              locale: locale,
               multipleMediaBuilder: multipleMediaBuilder,
               heroBuilder: heroBuilder,
               singleMedia: singleMedia,
@@ -123,13 +130,13 @@ class GalleryPicker {
     return BottomSheetPanel.isCollapsed;
   }
 
-  static Future<GalleryMedia?> get collectGallery async {
-    return await PhoneGalleryController.collectGallery;
+  static Future<GalleryMedia?> collectGallery({Locale? locale}) async {
+    return await PhoneGalleryController.collectGallery(locale: locale);
   }
 
-  static Future<GalleryMedia?> get initializeGallery async {
+  static Future<GalleryMedia?> initializeGallery({Locale? locale}) async {
     final controller = Get.put(PhoneGalleryController());
-    await controller.initializeAlbums();
+    await controller.initializeAlbums(locale: locale);
     return controller.media;
   }
 }

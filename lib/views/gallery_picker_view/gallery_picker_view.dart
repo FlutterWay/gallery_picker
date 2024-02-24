@@ -21,6 +21,7 @@ class GalleryPickerView extends StatefulWidget {
       multipleMediaBuilder;
   final bool startWithRecent;
   final bool isBottomSheet;
+  final Locale? locale;
   final List<MediaFile>? initSelectedMedia;
   final List<MediaFile>? extraRecentMedia;
   final bool singleMedia;
@@ -33,6 +34,7 @@ class GalleryPickerView extends StatefulWidget {
       this.singleMedia = false,
       this.isBottomSheet = false,
       this.heroBuilder,
+      this.locale,
       this.multipleMediaBuilder,
       this.startWithRecent = false});
 
@@ -73,7 +75,7 @@ class _GalleryPickerState extends State<GalleryPickerView> {
     }
     config = galleryController.config;
     if (!galleryController.isInitialized) {
-      galleryController.initializeAlbums();
+      galleryController.initializeAlbums(locale: widget.locale);
     }
     super.initState();
   }
@@ -95,7 +97,13 @@ class _GalleryPickerState extends State<GalleryPickerView> {
                   controller: controller.pageController,
                   physics: const NeverScrollableScrollPhysics(),
                   children: [
-                    WillPopScope(
+                    PopScope(
+                        canPop: true,
+                        onPopInvoked: (value) {
+                          if (!widget.isBottomSheet) {
+                            controller.disposeController();
+                          }
+                        },
                         child: Scaffold(
                           backgroundColor: config.backgroundColor,
                           appBar: PickerAppBar(
@@ -210,13 +218,7 @@ class _GalleryPickerState extends State<GalleryPickerView> {
                               ),
                             ],
                           ),
-                        ),
-                        onWillPop: () async {
-                          if (!widget.isBottomSheet) {
-                            controller.disposeController();
-                          }
-                          return true;
-                        }),
+                        )),
                     AlbumPage(
                         album: controller.selectedAlbum,
                         controller: controller,
@@ -243,7 +245,7 @@ class _GalleryPickerState extends State<GalleryPickerView> {
                     extraRecentMedia: widget.extraRecentMedia,
                     isRecent: widget.startWithRecent);
                 if (!controller.isInitialized) {
-                  await controller.initializeAlbums();
+                  await controller.initializeAlbums(locale: widget.locale);
                 }
                 setState(() {});
               },

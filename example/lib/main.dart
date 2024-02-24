@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 // ignore: depend_on_referenced_packages
 import 'package:gallery_picker/gallery_picker.dart';
+
 import 'examples/multiple_medias.dart';
 
 void main() {
@@ -227,6 +228,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<void> getGalleryMedia() async {
     // ignore: unused_local_variable
-    GalleryMedia? allmedia = await GalleryPicker.collectGallery;
+    GalleryMedia? allmedia =
+        await GalleryPicker.collectGallery(locale: const Locale("tr"));
   }
 }

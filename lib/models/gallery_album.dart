@@ -1,8 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 import 'package:photo_gallery/photo_gallery.dart';
+
 import '../controller/gallery_controller.dart';
 import '/models/media_file.dart';
 import '/models/medium.dart';
@@ -46,18 +50,21 @@ class GalleryAlbum {
     }
   }
 
-  Future<void> initialize() async {
+  Future<void> initialize({Locale? locale}) async {
     List<DateCategory> dateCategory = [];
     for (var medium in sortAlbumMediaDates((await album.listMedia()).items)) {
       MediaFile mediaFile = MediaFile.medium(medium);
-      String name = getDateCategory(mediaFile);
+      String name = getDateCategory(mediaFile, locale: locale);
       if (dateCategory.any((element) => element.name == name)) {
         dateCategory
             .singleWhere((element) => element.name == name)
             .files
             .add(mediaFile);
       } else {
-        dateCategory.add(DateCategory(files: [mediaFile], name: name));
+        DateTime? lastDate = mediaFile.lastModified;
+        lastDate = lastDate ?? DateTime.now();
+        dateCategory.add(
+            DateCategory(files: [mediaFile], name: name, dateTime: lastDate));
       }
     }
     dateCategories = dateCategory;
@@ -82,22 +89,28 @@ class GalleryAlbum {
   List<MediaFile> get files =>
       dateCategories.expand((element) => element.files).toList();
 
-  String getDateCategory(MediaFile media) {
+  String getDateCategory(MediaFile media, {Locale? locale}) {
     Config config = GetInstance().isRegistered<PhoneGalleryController>()
         ? Get.find<PhoneGalleryController>().config
         : Config();
     DateTime? lastDate = media.lastModified;
     lastDate = lastDate ?? DateTime.now();
+    initializeDateFormatting();
+    String languageCode = locale != null
+        ? (locale).languageCode
+        : Platform.localeName.split('_')[0];
     if (daysBetween(lastDate) <= 3) {
       return config.recent;
     } else if (daysBetween(lastDate) > 3 && daysBetween(lastDate) <= 7) {
       return config.lastWeek;
-    } else if (daysBetween(lastDate) > 7 && daysBetween(lastDate) <= 31) {
+    } else if (DateTime.now().month == lastDate.month) {
       return config.lastMonth;
-    } else if (daysBetween(lastDate) > 31 && daysBetween(lastDate) <= 365) {
-      return DateFormat.MMMM().format(lastDate).toString();
+    } else if (DateTime.now().year == lastDate.year) {
+      String month = DateFormat.MMMM(languageCode).format(lastDate).toString();
+      return "$month ${lastDate.day}";
     } else {
-      return DateFormat.y().format(lastDate).toString();
+      String month = DateFormat.MMMM(languageCode).format(lastDate).toString();
+      return "$month ${lastDate.day}, ${lastDate.year}";
     }
   }
 
@@ -120,8 +133,7 @@ class GalleryAlbum {
   }
 
   sort() {
-    dateCategories.sort(
-        (a, b) => a.getIndexOfCategory().compareTo(b.getIndexOfCategory()));
+    dateCategories.sort((a, b) => b.dateTime.compareTo(a.dateTime));
 
     for (var category in dateCategories) {
       category.files.sort((a, b) {
@@ -136,15 +148,18 @@ class GalleryAlbum {
     }
   }
 
-  void addFile(MediaFile file) {
-    String name = getDateCategory(file);
+  void addFile(MediaFile file, {Locale? locale}) {
+    String name = getDateCategory(file, locale: locale);
     if (dateCategories.any((element) => element.name == name)) {
       dateCategories
           .singleWhere((element) => element.name == name)
           .files
           .add(file);
     } else {
-      dateCategories.add(DateCategory(files: [file], name: name));
+      DateTime? lastDate = file.lastModified;
+      lastDate = lastDate ?? DateTime.now();
+      dateCategories
+          .add(DateCategory(files: [file], name: name, dateTime: lastDate));
     }
   }
 }
@@ -152,24 +167,9 @@ class GalleryAlbum {
 class DateCategory {
   String name;
   List<MediaFile> files;
-  DateCategory({required this.files, required this.name});
-
-  int getIndexOfCategory() {
-    Config config = GetInstance().isRegistered<PhoneGalleryController>()
-        ? Get.find<PhoneGalleryController>().config
-        : Config();
-    int index = [
-      config.recent,
-      config.lastWeek,
-      config.lastMonth,
-      ...config.months
-    ].indexOf(name);
-    if (index == -1) {
-      return 3000 - int.parse(name);
-    } else {
-      return index;
-    }
-  }
+  DateTime dateTime;
+  DateCategory(
+      {required this.files, required this.name, required this.dateTime});
 }
 
 enum AlbumType { video, image, mixed }

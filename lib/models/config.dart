@@ -21,7 +21,6 @@ class Config {
       lastWeek,
       tapPhotoSelect,
       selected;
-  List<String> months;
   Mode mode;
 
   Config(
@@ -42,20 +41,6 @@ class Config {
       this.lastWeek = "Last Week",
       this.tapPhotoSelect = "Tap photo to select",
       this.selected = "Selected",
-      this.months = const [
-        "January",
-        "February",
-        "March",
-        "April",
-        "May",
-        "June",
-        "July",
-        "August",
-        "September",
-        "October",
-        "November",
-        "December"
-      ],
       this.mode = Mode.light,
       Widget? selectIcon}) {
     if (backgroundColor == null) {

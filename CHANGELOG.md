@@ -181,5 +181,8 @@
 * kotlin version upgraded
 * version of packages upgraded
 
+## 0.5.1
+
+* readme changed
   
   

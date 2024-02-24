@@ -16,6 +16,8 @@ Gallery Picker is a flutter package that will allow you to pick media file(s), m
 
 [✔] BottomSheet layout
 
+[✔] Auto localization for recent tabs
+
 [✔] Fetch all media files from your phone
 
 [✔] Comprehensively customizable design (desitination page, hero destination page...)
@@ -103,7 +105,7 @@ List<MediaFile>? media = await GalleryPicker.pickMedia(context: context);
 ### Get All Media Files in Gallery
 
 ```dart
-GalleryMedia? allmedia = await GalleryPicker.collectGallery;
+GalleryMedia? allmedia = await GalleryPicker.collectGallery();
 ```
 
 ### Listen selected files inside gallery picker
@@ -252,20 +254,6 @@ List<MediaFile>? media = await GalleryPicker.pickMedia(
     lastWeek: "Last Week",
     tapPhotoSelect: "Tap photo to select",
     selected: "Selected",
-    months: [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December"
-    ],
     selectIcon: Container(
       width: 50,
       height: 50,
@@ -431,7 +419,7 @@ BottomSheetBuilder(
 View all media files in the album sorted by its creation date
 
 ```dart
-GalleryMedia? allmedia = await GalleryPicker.collectGallery;
+GalleryMedia? allmedia = await GalleryPicker.collectGallery();
 ```
 
 ```dart
@@ -445,7 +433,7 @@ AlbumMediaView(
 View all album categories
 
 ```dart
-GalleryMedia? allmedia = await GalleryPicker.collectGallery;
+GalleryMedia? allmedia = await GalleryPicker.collectGallery();
 ```
 ```dart
 AlbumCategoriesView(

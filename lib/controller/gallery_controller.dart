@@ -188,10 +188,8 @@ class PhoneGalleryController extends GetxController {
     }
     bool statusStorage =
         await PhoneGalleryController.requestPermission(Permission.storage);
-    if (statusStorage) {
-      return await PhoneGalleryController.requestPermission(Permission.photos);
-    }
-    return false;
+
+    return statusStorage;
   }
 
   static Future<bool> requestPermission(Permission permission) async {
@@ -248,8 +246,7 @@ class PhoneGalleryController extends GetxController {
         return await Permission.storage.isGranted;
       }
     }
-    return (await Permission.storage.isGranted) &&
-        (await Permission.photos.isGranted);
+    return (await Permission.storage.isGranted);
   }
 
   static Future<GalleryMedia?> collectGallery({Locale? locale}) async {
